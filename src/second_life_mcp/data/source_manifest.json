@@ -1,0 +1,9 @@
+[
+  {
+    "name": "Linden Lab SLua supplemental API definitions",
+    "url": "https://raw.githubusercontent.com/secondlife/sl-vscode-plugin/develop/data/dev/sl-lua-defs.json",
+    "git_blob_sha": "b241a0b59dd1101b27bae1241bf2e4ec9b01064a",
+    "reviewed_commit": "5769f7cb07ada04f58206782a3f80a8f82102b3d",
+    "reviewed_on": "2026-11-05"
+  }
+]

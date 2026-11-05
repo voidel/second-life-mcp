@@ -1,0 +1,419 @@
+{
+  "schema_version": 1,
+  "coverage": "partial",
+  "symbols": [
+    {
+      "name": "llMessageLinked",
+      "kind": "function",
+      "signature": "llMessageLinked(integer link, integer num, string str, key id)",
+      "summary": "Deliver a link_message event to scripts in the selected prims.",
+      "tags": [
+        "links",
+        "messages",
+        "events"
+      ],
+      "caveats": [
+        "A selected script can receive its own message; avoid forwarding loops.",
+        "Wide targeting multiplies event delivery."
+      ],
+      "delay_seconds": 0,
+      "source_url": "https://wiki.secondlife.com/wiki/LlMessageLinked",
+      "reviewed_on": "2026-11-05"
+    },
+    {
+      "name": "llSetTimerEvent",
+      "kind": "function",
+      "signature": "llSetTimerEvent(float sec)",
+      "summary": "Set this script's timer interval; zero disables it.",
+      "tags": [
+        "timer",
+        "clock",
+        "events"
+      ],
+      "caveats": [
+        "Timer delivery can be late; count elapsed time rather than assuming exact ticks."
+      ],
+      "delay_seconds": 0,
+      "source_url": "https://wiki.secondlife.com/wiki/LlSetTimerEvent",
+      "reviewed_on": "2026-11-05"
+    },
+    {
+      "name": "llGetNotecardLineSync",
+      "kind": "function",
+      "signature": "string llGetNotecardLineSync(string name, integer line)",
+      "summary": "Read a zero-based line from a notecard already present in the simulator cache.",
+      "tags": [
+        "notecard",
+        "cache",
+        "inventory"
+      ],
+      "caveats": [
+        "NAK can mean an unavailable cache entry; retain an asynchronous fallback.",
+        "EOF marks a line beyond the card's end."
+      ],
+      "delay_seconds": 0,
+      "source_url": "https://wiki.secondlife.com/wiki/LlGetNotecardLineSync",
+      "reviewed_on": "2026-11-05"
+    },
+    {
+      "name": "llHTTPRequest",
+      "kind": "function",
+      "signature": "key llHTTPRequest(string url, list parameters, string body)",
+      "summary": "Start an outgoing HTTP request and return its request handle.",
+      "tags": [
+        "http",
+        "network",
+        "async"
+      ],
+      "caveats": [
+        "Handle NULL_KEY when a request cannot be started.",
+        "Match the response handle before consuming the body."
+      ],
+      "delay_seconds": 0,
+      "source_url": "https://wiki.secondlife.com/wiki/LlHTTPRequest",
+      "reviewed_on": "2026-11-05"
+    },
+    {
+      "name": "llRequestPermissions",
+      "kind": "function",
+      "signature": "llRequestPermissions(key agent, integer permissions)",
+      "summary": "Request avatar permissions as a combined bitmask.",
+      "tags": [
+        "permissions",
+        "avatar",
+        "controls",
+        "camera"
+      ],
+      "caveats": [
+        "Execution continues before the permission response.",
+        "Request all permissions the script needs together; omitted permissions can be revoked."
+      ],
+      "delay_seconds": 0,
+      "source_url": "https://wiki.secondlife.com/wiki/LlRequestPermissions",
+      "reviewed_on": "2026-11-05"
+    },
+    {
+      "name": "llGetUsedMemory",
+      "kind": "function",
+      "signature": "integer llGetUsedMemory()",
+      "summary": "Report script memory usage in bytes.",
+      "tags": [
+        "memory",
+        "mono",
+        "profiling"
+      ],
+      "caveats": [
+        "Profile representative peak workloads; an idle reading is not a peak guarantee."
+      ],
+      "delay_seconds": 0,
+      "source_url": "https://wiki.secondlife.com/wiki/LlGetUsedMemory",
+      "reviewed_on": "2026-11-05"
+    },
+    {
+      "name": "llGetMemoryLimit",
+      "kind": "function",
+      "signature": "integer llGetMemoryLimit()",
+      "summary": "Read the script's current memory limit in bytes.",
+      "tags": [
+        "memory",
+        "mono",
+        "limit"
+      ],
+      "caveats": [
+        "A memory limit is a cap, not a statement of remaining headroom."
+      ],
+      "delay_seconds": 0,
+      "source_url": "https://wiki.secondlife.com/wiki/LlGetMemoryLimit",
+      "reviewed_on": "2026-11-05"
+    },
+    {
+      "name": "llSetLinkPrimitiveParamsFast",
+      "kind": "function",
+      "signature": "llSetLinkPrimitiveParamsFast(integer link, list rules)",
+      "summary": "Apply parameter rules to selected linked prims without the ordinary setter's forced sleep.",
+      "tags": [
+        "prim",
+        "links",
+        "render",
+        "texture"
+      ],
+      "caveats": [
+        "Each PRIM rule has its own argument layout and constraints."
+      ],
+      "delay_seconds": 0,
+      "source_url": "https://wiki.secondlife.com/wiki/LlSetLinkPrimitiveParamsFast",
+      "reviewed_on": "2026-11-05"
+    },
+    {
+      "name": "llGetTime",
+      "kind": "function",
+      "signature": "float llGetTime()",
+      "summary": "Read elapsed seconds on the script's resettable clock.",
+      "tags": [
+        "clock",
+        "time"
+      ],
+      "caveats": [
+        "Resetting this clock affects deadlines expressed in its time domain."
+      ],
+      "delay_seconds": 0,
+      "source_url": "https://wiki.secondlife.com/wiki/LlGetTime",
+      "reviewed_on": "2026-11-05"
+    },
+    {
+      "name": "llGetAndResetTime",
+      "kind": "function",
+      "signature": "float llGetAndResetTime()",
+      "summary": "Read the current script clock and reset it in one call.",
+      "tags": [
+        "clock",
+        "time",
+        "reset"
+      ],
+      "caveats": [
+        "Rebase outstanding deadlines when resetting a clock shared by concurrent activities."
+      ],
+      "delay_seconds": 0,
+      "source_url": "https://wiki.secondlife.com/wiki/LlGetAndResetTime",
+      "reviewed_on": "2026-11-05"
+    },
+    {
+      "name": "llLinksetDataReadProtected",
+      "kind": "function",
+      "signature": "string llLinksetDataReadProtected(string name, string pass)",
+      "summary": "Read a protected linkset datastore value using its password.",
+      "tags": [
+        "linkset",
+        "data",
+        "protected"
+      ],
+      "caveats": [
+        "An absent name or incorrect password yields an empty string."
+      ],
+      "delay_seconds": 0,
+      "source_url": "https://wiki.secondlife.com/wiki/LlLinksetDataReadProtected",
+      "reviewed_on": "2026-11-05"
+    },
+    {
+      "name": "llOwnerSay",
+      "kind": "function",
+      "signature": "llOwnerSay(string msg)",
+      "summary": "Send chat visible to the object's owner.",
+      "tags": [
+        "chat",
+        "owner",
+        "debug"
+      ],
+      "caveats": [
+        "Do not put credentials or private request bodies into debugging chat."
+      ],
+      "delay_seconds": 0,
+      "source_url": "https://wiki.secondlife.com/wiki/LlOwnerSay",
+      "reviewed_on": "2026-11-05"
+    },
+    {
+      "name": "llReplaceSubString",
+      "kind": "function",
+      "signature": "string llReplaceSubString(string src, string pattern, string replacement_pattern, integer count)",
+      "summary": "Replace matching substrings in a string.",
+      "tags": [
+        "string",
+        "replace"
+      ],
+      "caveats": [
+        "Zero count replaces every match; positive and negative counts choose opposite traversal directions."
+      ],
+      "delay_seconds": 0,
+      "source_url": "https://wiki.secondlife.com/wiki/LlReplaceSubString",
+      "reviewed_on": "2026-11-05"
+    },
+    {
+      "name": "state_entry",
+      "kind": "event",
+      "signature": "state_entry()",
+      "summary": "Run when the script enters a state.",
+      "tags": [
+        "state",
+        "startup"
+      ],
+      "caveats": [],
+      "delay_seconds": null,
+      "source_url": "https://wiki.secondlife.com/wiki/State_entry",
+      "reviewed_on": "2026-11-05"
+    },
+    {
+      "name": "timer",
+      "kind": "event",
+      "signature": "timer()",
+      "summary": "Handle delivery from the timer configured by llSetTimerEvent.",
+      "tags": [
+        "timer",
+        "clock"
+      ],
+      "caveats": [
+        "The configured interval does not guarantee exact event arrival times."
+      ],
+      "delay_seconds": null,
+      "source_url": "https://wiki.secondlife.com/wiki/Timer",
+      "reviewed_on": "2026-11-05"
+    },
+    {
+      "name": "control",
+      "kind": "event",
+      "signature": "control(key id, integer level, integer edge)",
+      "summary": "Receive captured control levels and changes for an avatar.",
+      "tags": [
+        "controls",
+        "input",
+        "permissions"
+      ],
+      "caveats": [
+        "Taking controls requires the appropriate permission."
+      ],
+      "delay_seconds": null,
+      "source_url": "https://wiki.secondlife.com/wiki/Control",
+      "reviewed_on": "2026-11-05"
+    },
+    {
+      "name": "link_message",
+      "kind": "event",
+      "signature": "link_message(integer sender_num, integer num, string str, key id)",
+      "summary": "Receive a message sent by another or the same linked script.",
+      "tags": [
+        "links",
+        "messages"
+      ],
+      "caveats": [
+        "Validate the sender and application session before acting."
+      ],
+      "delay_seconds": null,
+      "source_url": "https://wiki.secondlife.com/wiki/Link_message",
+      "reviewed_on": "2026-11-05"
+    },
+    {
+      "name": "http_response",
+      "kind": "event",
+      "signature": "http_response(key request_id, integer status, list metadata, string body)",
+      "summary": "Receive an outgoing HTTP request's response.",
+      "tags": [
+        "http",
+        "network",
+        "async"
+      ],
+      "caveats": [
+        "A late response can belong to an obsolete request."
+      ],
+      "delay_seconds": null,
+      "source_url": "https://wiki.secondlife.com/wiki/Http_response",
+      "reviewed_on": "2026-11-05"
+    },
+    {
+      "name": "dataserver",
+      "kind": "event",
+      "signature": "dataserver(key queryid, string data)",
+      "summary": "Receive the result of an asynchronous data request.",
+      "tags": [
+        "notecard",
+        "async",
+        "data"
+      ],
+      "caveats": [
+        "Correlate queryid with the request you are awaiting."
+      ],
+      "delay_seconds": null,
+      "source_url": "https://wiki.secondlife.com/wiki/Dataserver",
+      "reviewed_on": "2026-11-05"
+    },
+    {
+      "name": "run_time_permissions",
+      "kind": "event",
+      "signature": "run_time_permissions(integer perm)",
+      "summary": "Receive a permission response bitmask.",
+      "tags": [
+        "permissions",
+        "avatar"
+      ],
+      "caveats": [
+        "Check granted bits before using permission-dependent functions."
+      ],
+      "delay_seconds": null,
+      "source_url": "https://wiki.secondlife.com/wiki/Run_time_permissions",
+      "reviewed_on": "2026-11-05"
+    },
+    {
+      "name": "LINK_SET",
+      "kind": "constant",
+      "signature": "integer LINK_SET = -1",
+      "summary": "Select every prim in the linkset.",
+      "tags": [
+        "links",
+        "target"
+      ],
+      "caveats": [
+        "For linked messages this delivers to every script in selected prims."
+      ],
+      "delay_seconds": null,
+      "source_url": "https://wiki.secondlife.com/wiki/LINK_SET",
+      "reviewed_on": "2026-11-05"
+    },
+    {
+      "name": "LINK_ROOT",
+      "kind": "constant",
+      "signature": "integer LINK_ROOT = 1",
+      "summary": "Select the root prim in a multi-prim linkset.",
+      "tags": [
+        "links",
+        "target"
+      ],
+      "caveats": [],
+      "delay_seconds": null,
+      "source_url": "https://wiki.secondlife.com/wiki/LINK_ROOT",
+      "reviewed_on": "2026-11-05"
+    },
+    {
+      "name": "LINK_THIS",
+      "kind": "constant",
+      "signature": "integer LINK_THIS = -4",
+      "summary": "Select the prim containing the executing script.",
+      "tags": [
+        "links",
+        "target"
+      ],
+      "caveats": [],
+      "delay_seconds": null,
+      "source_url": "https://wiki.secondlife.com/wiki/LINK_THIS",
+      "reviewed_on": "2026-11-05"
+    },
+    {
+      "name": "NULL_KEY",
+      "kind": "constant",
+      "signature": "string NULL_KEY = \"00000000-0000-0000-0000-000000000000\"",
+      "summary": "The all-zero UUID string used as a null key value.",
+      "tags": [
+        "key",
+        "uuid"
+      ],
+      "caveats": [
+        "The constant's declared type is string; LSL can cast it to key."
+      ],
+      "delay_seconds": null,
+      "source_url": "https://wiki.secondlife.com/wiki/NULL_KEY",
+      "reviewed_on": "2026-11-05"
+    },
+    {
+      "name": "PERMISSION_TAKE_CONTROLS",
+      "kind": "constant",
+      "signature": "integer PERMISSION_TAKE_CONTROLS = 0x4",
+      "summary": "Permission bit for capturing an avatar's controls.",
+      "tags": [
+        "permissions",
+        "controls"
+      ],
+      "caveats": [],
+      "delay_seconds": null,
+      "source_url": "https://wiki.secondlife.com/wiki/PERMISSION_TAKE_CONTROLS",
+      "reviewed_on": "2026-11-05"
+    }
+  ],
+  "language": "lsl"
+}

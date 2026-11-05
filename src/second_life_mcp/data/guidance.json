@@ -1,0 +1,102 @@
+[
+  {
+    "topic": "globals",
+    "languages": [
+      "lsl"
+    ],
+    "text": "LSL permits global variables above the state declarations. Initializer restrictions do not prohibit global state.",
+    "source_url": "https://wiki.secondlife.com/wiki/LSL_Variables",
+    "reviewed_on": "2026-11-05"
+  },
+  {
+    "topic": "syntax",
+    "languages": [
+      "lsl"
+    ],
+    "text": "Use supported LSL control flow. Ternary expressions and switch statements are unavailable. Code checks here do not replace compilation.",
+    "source_url": "https://wiki.secondlife.com/wiki/LSL_Flow_Control",
+    "reviewed_on": "2026-11-05"
+  },
+  {
+    "topic": "evaluation",
+    "languages": [
+      "lsl"
+    ],
+    "text": "LSL evaluates both operands of logical AND and OR. Do not use these operators to guard an unsafe expression by short-circuiting.",
+    "source_url": "https://wiki.secondlife.com/wiki/LSL_Operators",
+    "reviewed_on": "2026-11-05"
+  },
+  {
+    "topic": "memory",
+    "languages": [
+      "lsl"
+    ],
+    "text": "Measure peak script memory under representative workloads. Large temporary lists and strings can exhaust headroom even when steady-state usage looks acceptable.",
+    "source_url": "https://wiki.secondlife.com/wiki/LSL_Script_Memory",
+    "reviewed_on": "2026-11-05"
+  },
+  {
+    "topic": "notecards",
+    "languages": [
+      "lsl"
+    ],
+    "text": "A synchronous notecard lookup can return NAK when the card is uncached. Retain an asynchronous request path and correlate dataserver replies.",
+    "source_url": "https://wiki.secondlife.com/wiki/LlGetNotecardLineSync",
+    "reviewed_on": "2026-11-05"
+  },
+  {
+    "topic": "migration",
+    "languages": [
+      "lsl",
+      "slua"
+    ],
+    "text": "SLua is based on Luau. Its ll namespace, table indexing, types and event model need deliberate migration; renaming llFoo to ll.Foo alone is insufficient.",
+    "source_url": "https://create.secondlife.com/script/learn-lua/from-lsl/",
+    "reviewed_on": "2026-11-05"
+  },
+  {
+    "topic": "tables",
+    "languages": [
+      "slua"
+    ],
+    "text": "Conventional array-style table sequences begin at index 1. Lua tables also support other keys, so a key of 0 is not inherently invalid.",
+    "source_url": "https://create.secondlife.com/script/learn-lua/from-lsl/",
+    "reviewed_on": "2026-11-05"
+  },
+  {
+    "topic": "events",
+    "languages": [
+      "slua"
+    ],
+    "text": "Register event callbacks through LLEvents:on. Keep callback references for removal and avoid accumulating duplicate handlers. A function named state_entry does not by itself establish an LSL-style state lifecycle.",
+    "source_url": "https://create.secondlife.com/script/learn-lua/events/",
+    "reviewed_on": "2026-11-05"
+  },
+  {
+    "topic": "timers",
+    "languages": [
+      "slua"
+    ],
+    "text": "LLTimers offers independent recurring and one-shot callbacks. Store returned references and cancel unused callbacks with LLTimers:off. Validate timing behavior in the target simulator.",
+    "source_url": "https://create.secondlife.com/script/learn-lua/timers/",
+    "reviewed_on": "2026-11-05"
+  },
+  {
+    "topic": "types",
+    "languages": [
+      "slua"
+    ],
+    "text": "Use SLua constructors for vector, quaternion and UUID values. Conversion helpers can return nil; verify their current signatures before substituting for LSL casts.",
+    "source_url": "https://github.com/secondlife/sl-vscode-plugin/blob/5769f7cb07ada04f58206782a3f80a8f82102b3d/data/dev/sl-lua-defs.json",
+    "reviewed_on": "2026-11-05"
+  },
+  {
+    "topic": "availability",
+    "languages": [
+      "slua"
+    ],
+    "text": "Linden Lab announced the SLua open beta on 2 December 2025. Verify current viewer and region support instead of assuming rollout from this snapshot's review date.",
+    "source_url": "https://community.secondlife.com/news/featured-news/announcing-the-slua-open-beta-modern-scripting-comes-to-second-life-r11237/",
+    "reviewed_on": "2026-11-05"
+  }
+]

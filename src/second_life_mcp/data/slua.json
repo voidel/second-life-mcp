@@ -1,0 +1,272 @@
+{
+  "schema_version": 1,
+  "coverage": "partial",
+  "language": "slua",
+  "symbols": [
+    {
+      "name": "ll.Say",
+      "kind": "function",
+      "signature": "ll.Say(channel: number, msg: string): ()",
+      "summary": "Send a message on a chat channel.",
+      "tags": [
+        "chat",
+        "ll"
+      ],
+      "source_url": "https://create.secondlife.com/script/learn-lua/events/",
+      "caveats": [
+        "Uses the ll table's dot-call convention."
+      ],
+      "reviewed_on": "2026-11-05",
+      "delay_seconds": null
+    },
+    {
+      "name": "ll.MessageLinked",
+      "kind": "function",
+      "signature": "ll.MessageLinked(link: number, num: number, str: string, id: string): ()",
+      "summary": "Deliver a linked message to the selected prims.",
+      "tags": [
+        "links",
+        "messages",
+        "ll"
+      ],
+      "source_url": "https://create.secondlife.com/script/learn-lua/events/",
+      "caveats": [
+        "Avoid event handlers that repeatedly trigger their own linked messages."
+      ],
+      "reviewed_on": "2026-11-05",
+      "delay_seconds": null
+    },
+    {
+      "name": "LLEvents:on",
+      "kind": "function",
+      "signature": "LLEvents:on(event: LLEventName, callback: LLEventHandler): LLEventHandler",
+      "summary": "Subscribe a callback to an event.",
+      "tags": [
+        "events",
+        "subscription"
+      ],
+      "source_url": "https://github.com/secondlife/sl-vscode-plugin/blob/5769f7cb07ada04f58206782a3f80a8f82102b3d/data/dev/sl-lua-defs.json",
+      "caveats": [
+        "Keep the returned callback reference when later removal is needed."
+      ],
+      "reviewed_on": "2026-11-05",
+      "delay_seconds": null
+    },
+    {
+      "name": "LLEvents:off",
+      "kind": "function",
+      "signature": "LLEvents:off(event: LLEventName, callback: LLEventHandler): boolean",
+      "summary": "Remove a matching event subscription.",
+      "tags": [
+        "events",
+        "cleanup"
+      ],
+      "source_url": "https://github.com/secondlife/sl-vscode-plugin/blob/5769f7cb07ada04f58206782a3f80a8f82102b3d/data/dev/sl-lua-defs.json",
+      "caveats": [
+        "Use the same callback reference that was registered."
+      ],
+      "reviewed_on": "2026-11-05",
+      "delay_seconds": null
+    },
+    {
+      "name": "LLEvents:once",
+      "kind": "function",
+      "signature": "LLEvents:once(event: LLEventName, callback: LLEventHandler): LLEventHandler",
+      "summary": "Subscribe a callback for one event delivery.",
+      "tags": [
+        "events",
+        "subscription"
+      ],
+      "source_url": "https://github.com/secondlife/sl-vscode-plugin/blob/5769f7cb07ada04f58206782a3f80a8f82102b3d/data/dev/sl-lua-defs.json",
+      "caveats": [
+        "The returned reference is a wrapper around the supplied callback."
+      ],
+      "reviewed_on": "2026-11-05",
+      "delay_seconds": null
+    },
+    {
+      "name": "LLEvents:listeners",
+      "kind": "function",
+      "signature": "LLEvents:listeners(event: LLEventName): {LLEventHandler}",
+      "summary": "Inspect callbacks registered for one event.",
+      "tags": [
+        "events",
+        "subscription"
+      ],
+      "source_url": "https://github.com/secondlife/sl-vscode-plugin/blob/5769f7cb07ada04f58206782a3f80a8f82102b3d/data/dev/sl-lua-defs.json",
+      "caveats": [],
+      "reviewed_on": "2026-11-05",
+      "delay_seconds": null
+    },
+    {
+      "name": "LLEvents:eventNames",
+      "kind": "function",
+      "signature": "LLEvents:eventNames(): {string}",
+      "summary": "List event names with registered listeners.",
+      "tags": [
+        "events",
+        "subscription"
+      ],
+      "source_url": "https://github.com/secondlife/sl-vscode-plugin/blob/5769f7cb07ada04f58206782a3f80a8f82102b3d/data/dev/sl-lua-defs.json",
+      "caveats": [],
+      "reviewed_on": "2026-11-05",
+      "delay_seconds": null
+    },
+    {
+      "name": "LLTimers:every",
+      "kind": "function",
+      "signature": "LLTimers:every(seconds: number, callback: LLTimerEveryCallback): LLTimerCallback",
+      "summary": "Schedule an independently recurring timer callback.",
+      "tags": [
+        "timer",
+        "clock"
+      ],
+      "source_url": "https://github.com/secondlife/sl-vscode-plugin/blob/5769f7cb07ada04f58206782a3f80a8f82102b3d/data/dev/sl-lua-defs.json",
+      "caveats": [
+        "Retain the returned reference for LLTimers:off."
+      ],
+      "reviewed_on": "2026-11-05",
+      "delay_seconds": null
+    },
+    {
+      "name": "LLTimers:once",
+      "kind": "function",
+      "signature": "LLTimers:once(seconds: number, callback: LLTimerOnceCallback): LLTimerCallback",
+      "summary": "Schedule a single delayed callback.",
+      "tags": [
+        "timer",
+        "clock"
+      ],
+      "source_url": "https://github.com/secondlife/sl-vscode-plugin/blob/5769f7cb07ada04f58206782a3f80a8f82102b3d/data/dev/sl-lua-defs.json",
+      "caveats": [],
+      "reviewed_on": "2026-11-05",
+      "delay_seconds": null
+    },
+    {
+      "name": "LLTimers:off",
+      "kind": "function",
+      "signature": "LLTimers:off(callback: LLTimerCallback): boolean",
+      "summary": "Cancel a timer identified by its callback reference.",
+      "tags": [
+        "timer",
+        "cleanup"
+      ],
+      "source_url": "https://github.com/secondlife/sl-vscode-plugin/blob/5769f7cb07ada04f58206782a3f80a8f82102b3d/data/dev/sl-lua-defs.json",
+      "caveats": [],
+      "reviewed_on": "2026-11-05",
+      "delay_seconds": null
+    },
+    {
+      "name": "vector",
+      "kind": "function",
+      "signature": "vector(x: number, y: number, z: number?): vector",
+      "summary": "Construct a vector value from numeric components.",
+      "tags": [
+        "types",
+        "vector"
+      ],
+      "source_url": "https://github.com/secondlife/sl-vscode-plugin/blob/5769f7cb07ada04f58206782a3f80a8f82102b3d/data/dev/sl-lua-defs.json",
+      "caveats": [
+        "The source definition permits an omitted z component."
+      ],
+      "reviewed_on": "2026-11-05",
+      "delay_seconds": null
+    },
+    {
+      "name": "quaternion",
+      "kind": "function",
+      "signature": "quaternion(x: number, y: number, z: number, s: number): quaternion",
+      "summary": "Construct a quaternion rotation value.",
+      "tags": [
+        "types",
+        "rotation"
+      ],
+      "source_url": "https://github.com/secondlife/sl-vscode-plugin/blob/5769f7cb07ada04f58206782a3f80a8f82102b3d/data/dev/sl-lua-defs.json",
+      "caveats": [],
+      "reviewed_on": "2026-11-05",
+      "delay_seconds": null
+    },
+    {
+      "name": "uuid",
+      "kind": "function",
+      "signature": "uuid(value: string | buffer | uuid): uuid?",
+      "summary": "Construct or convert a UUID value.",
+      "tags": [
+        "types",
+        "key",
+        "uuid"
+      ],
+      "source_url": "https://github.com/secondlife/sl-vscode-plugin/blob/5769f7cb07ada04f58206782a3f80a8f82102b3d/data/dev/sl-lua-defs.json",
+      "caveats": [
+        "The optional return type means failure can yield nil."
+      ],
+      "reviewed_on": "2026-11-05",
+      "delay_seconds": null
+    },
+    {
+      "name": "touuid",
+      "kind": "function",
+      "signature": "touuid(val: string | buffer | uuid): uuid?",
+      "summary": "Attempt conversion of a supported value to a UUID.",
+      "tags": [
+        "types",
+        "key",
+        "uuid"
+      ],
+      "source_url": "https://github.com/secondlife/sl-vscode-plugin/blob/5769f7cb07ada04f58206782a3f80a8f82102b3d/data/dev/sl-lua-defs.json",
+      "caveats": [
+        "Handle nil when conversion fails."
+      ],
+      "reviewed_on": "2026-11-05",
+      "delay_seconds": null
+    },
+    {
+      "name": "tovector",
+      "kind": "function",
+      "signature": "tovector(val: any): vector?",
+      "summary": "Attempt to convert a value to a vector.",
+      "tags": [
+        "types",
+        "vector"
+      ],
+      "source_url": "https://github.com/secondlife/sl-vscode-plugin/blob/5769f7cb07ada04f58206782a3f80a8f82102b3d/data/dev/sl-lua-defs.json",
+      "caveats": [
+        "Handle nil when conversion fails."
+      ],
+      "reviewed_on": "2026-11-05",
+      "delay_seconds": null
+    },
+    {
+      "name": "toquaternion",
+      "kind": "function",
+      "signature": "toquaternion(val: any): quaternion?",
+      "summary": "Attempt to convert a value to a quaternion.",
+      "tags": [
+        "types",
+        "rotation"
+      ],
+      "source_url": "https://github.com/secondlife/sl-vscode-plugin/blob/5769f7cb07ada04f58206782a3f80a8f82102b3d/data/dev/sl-lua-defs.json",
+      "caveats": [
+        "Handle nil when conversion fails."
+      ],
+      "reviewed_on": "2026-11-05",
+      "delay_seconds": null
+    },
+    {
+      "name": "torotation",
+      "kind": "function",
+      "signature": "torotation(val: any): quaternion?",
+      "summary": "Attempt rotation conversion using the quaternion representation.",
+      "tags": [
+        "types",
+        "rotation"
+      ],
+      "source_url": "https://github.com/secondlife/sl-vscode-plugin/blob/5769f7cb07ada04f58206782a3f80a8f82102b3d/data/dev/sl-lua-defs.json",
+      "caveats": [
+        "Handle nil when conversion fails."
+      ],
+      "reviewed_on": "2026-11-05",
+      "delay_seconds": null
+    }
+  ]
+}
