@@ -22,7 +22,7 @@ def register_language(server, language):
 
     @server.tool(name=f"{language}_reference_status", annotations=READ_ONLY, structured_output=True)
     def reference_status() -> dict[str, Any]:
-        """Report this language's partial reference coverage and manual review dates."""
+        """Report source-scoped reference coverage, revisions and manual review dates."""
         return catalog.status()
 
     @server.tool(name=f"{language}_lookup_symbol", annotations=READ_ONLY, structured_output=True)
@@ -62,7 +62,7 @@ def create_server(languages=("lsl", "slua")):
         instructions=(
             "Offline reference for Second Life LSL and SLua (Luau-based). "
             "Select the matching language tools and call its reference_status first. "
-            "The bundled catalogs are partial; absence is not proof of invalidity. "
+            "Coverage is scoped to pinned official inventories; absence is not proof of invalidity. "
             "Suggestions never replace exact lookup. Global variables are valid in LSL. "
             "SLua has distinct event/timer APIs; do not mechanically translate LSL signatures. "
             "Diagnostics are lexical, not compilation. Verify changing SLua APIs and region availability. "

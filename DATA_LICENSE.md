@@ -2,7 +2,11 @@
 
 Application source code is licensed under [MIT](LICENSE).
 
-The independently written reference summaries, caveats and guidance in
+The imported lsl.json and slua.json catalogs derive from the MIT-licensed
+[canonical Linden Lab definitions](https://github.com/secondlife/lsl-definitions).
+Their source revisions and hashes are bundled; Linden Lab's MIT notice below applies.
+
+The independently written guidance in
 `src/second_life_mcp/data/` are provided under
 [Creative Commons Attribution-ShareAlike 3.0](https://creativecommons.org/licenses/by-sa/3.0/).
 They paraphrase source material; the source_url field identifies the relevant

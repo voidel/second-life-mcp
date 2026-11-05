@@ -3,8 +3,8 @@
 Offline MCP reference tools for **LSL** and **SLua**, with separate language
 components and a combined stdio server.
 
-This is an initial development release: **25 LSL symbols and 17 SLua symbols**,
-plus focused guidance. Both catalogs are explicitly partial. A missing symbol
+This is an initial development release: **1,640 LSL records and 1,993 SLua records**,
+plus focused guidance. Both catalogs cover pinned official inventories plus supplemental SLua methods and callback types. A missing symbol
 means "unverified in this snapshot", not "does not exist". The code checkers are
 lexical aids, not compilers or simulators.
 
@@ -86,8 +86,17 @@ Reference entries link to the
 [Second Life Wiki](https://wiki.secondlife.com/wiki/LSL_Portal),
 [official creation documentation](https://create.secondlife.com/script/) or a
 pinned revision of Linden Lab's
-[SLua type definitions](https://github.com/secondlife/sl-vscode-plugin/blob/5769f7cb07ada04f58206782a3f80a8f82102b3d/data/dev/sl-lua-defs.json).
-Review dates describe manual review, not a live guarantee.
+[canonical definitions](https://github.com/secondlife/lsl-definitions/tree/77cca2b0ee676c46dab7146a2cf63692cc6b91fe).
+Imported records include structured parameters, return types, source flags, revision and hash. Import dates are distinct from manual review dates.
+
+Create candidate snapshots from an immutable official commit:
+
+```sh
+second-life-import --revision 77cca2b0ee676c46dab7146a2cf63692cc6b91fe --output-dir candidate
+```
+
+The importer validates both catalogs before writing candidates and never changes the bundled data.
+Use --source-dir for an already downloaded source set.
 
 ## Maintain and verify
 

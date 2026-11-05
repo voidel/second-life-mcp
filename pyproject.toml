@@ -10,7 +10,7 @@ readme = "README.md"
 requires-python = ">=3.11"
 license = "MIT"
 license-files = ["LICENSE", "DATA_LICENSE.md"]
-dependencies = ["mcp==2.3.0"]
+dependencies = ["mcp==2.3.0", "PyYAML>=6.0.3,<7"]
 
 [project.optional-dependencies]
 dev = ["pytest>=8,<10", "build>=1,<2"]
@@ -19,6 +19,7 @@ dev = ["pytest>=8,<10", "build>=1,<2"]
 second-life-mcp = "second_life_mcp.server:main"
 lsl-mcp = "lsl_mcp.server:main"
 slua-mcp = "slua_mcp.server:main"
+second-life-import = "second_life_mcp.importer:main"
 second-life-source-audit = "second_life_mcp.audit:main"
 
 [tool.setuptools.packages.find]

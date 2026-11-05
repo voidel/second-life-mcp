@@ -41,6 +41,7 @@ def check_code(code, catalog):
     masked, lexical = mask_noncode(code)
     tokens = [Token(m.group(), m.start()) for m in TOKENS.finditer(masked)]
     newlines = [-1] + [m.start() for m in re.finditer("\n", code)]
+    suggestions_cache = {}
     issues = []
     has_errors = False
     diagnostics_capped = False
@@ -96,7 +97,9 @@ def check_code(code, catalog):
                 report("nonportable-extension", token.start, f"{value} uses the OpenSimulator extension namespace; verify the target grid.",
                        severity="warning", source="https://wiki.secondlife.com/wiki/LSL_Portal")
             elif value not in catalog.symbols:
-                suggestions = catalog.lookup(value)["suggestions"]
+                if value not in suggestions_cache:
+                    suggestions_cache[value] = catalog.lookup(value)["suggestions"] if len(issues) < MAX_ISSUES else []
+                suggestions = suggestions_cache[value]
                 report("unverified-function", token.start,
                        f"{value} is absent from this partial reference. Verify it against the official wiki."
                        + (f" Nearby names: {', '.join(suggestions)}." if suggestions else ""),

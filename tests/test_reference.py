@@ -6,16 +6,17 @@ from pydantic import ValidationError
 from second_life_mcp.reference import Catalog
 
 
-@pytest.mark.parametrize("language,expected", [("lsl", 25), ("slua", 17)])
+@pytest.mark.parametrize("language,expected", [("lsl", 1640), ("slua", 1993)])
 def test_snapshot_has_sources_and_explicit_coverage(language, expected):
     catalog = Catalog(language)
-    assert len(catalog.symbols) == expected
+    assert len(catalog.records) == expected
     status = catalog.status()
-    assert status["coverage"] == "partial"
+    assert status["coverage"] == "official_snapshot"
     assert status["network_at_runtime"] is False
     for symbol in catalog.symbols.values():
         assert symbol.source_url.startswith("https://")
-        assert symbol.reviewed_on == "2026-11-05"
+        assert symbol.imported_on == "2026-11-05"
+        assert symbol.reviewed_on is None
 
 
 @pytest.mark.parametrize("language,name,typo", [
@@ -28,10 +29,10 @@ def test_lookup_never_silently_corrects(language, name, typo):
     result = catalog.lookup(typo)
     assert result["found"] is False
     assert name in result["suggestions"]
-    assert catalog.lookup("not_in_snapshot")["coverage"] == "partial"
+    assert catalog.lookup("not_in_snapshot")["coverage"] == "official_snapshot"
 
 
-@pytest.mark.parametrize("query", ['"', "(", "%", "NEAR(foo)", "foo OR bar", "*", "日本語"])
+@pytest.mark.parametrize("query", ['"', "(", "%", "NEAR(foo)", "foo OR bar", "*", "æ—¥æœ¬èªž"])
 def test_search_treats_query_as_literal_text(query):
     assert isinstance(Catalog().search(query)["results"], list)
 

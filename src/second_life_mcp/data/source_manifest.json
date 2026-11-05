@@ -1,9 +1,47 @@
 [
   {
-    "name": "Linden Lab SLua supplemental API definitions",
-    "url": "https://raw.githubusercontent.com/secondlife/sl-vscode-plugin/develop/data/dev/sl-lua-defs.json",
-    "git_blob_sha": "b241a0b59dd1101b27bae1241bf2e4ec9b01064a",
-    "reviewed_commit": "5769f7cb07ada04f58206782a3f80a8f82102b3d",
-    "reviewed_on": "2026-11-05"
+    "name": "lsl_keywords_pretty.xml",
+    "path": "generated/lsl_keywords_pretty.xml",
+    "revision": "77cca2b0ee676c46dab7146a2cf63692cc6b91fe",
+    "sha256": "083d0d65b57b88a77f4f3b7d4f915d0866e02308e3f05bd0afcecda6215646e8",
+    "git_blob_sha": "e60b0593ccb831b72f0aec139ed57facd8d3c4de",
+    "url": "https://raw.githubusercontent.com/secondlife/lsl-definitions/main/generated/lsl_keywords_pretty.xml",
+    "pinned_url": "https://raw.githubusercontent.com/secondlife/lsl-definitions/77cca2b0ee676c46dab7146a2cf63692cc6b91fe/generated/lsl_keywords_pretty.xml"
+  },
+  {
+    "name": "lua_keywords_pretty.xml",
+    "path": "generated/lua_keywords_pretty.xml",
+    "revision": "77cca2b0ee676c46dab7146a2cf63692cc6b91fe",
+    "sha256": "7aac22bf973484ef3ab98cec2b90b927a87774b5de8568351bc0f874f6790ef0",
+    "git_blob_sha": "bfd863f4fb5bdc8020c8b81ce8801211bdcd82d9",
+    "url": "https://raw.githubusercontent.com/secondlife/lsl-definitions/main/generated/lua_keywords_pretty.xml",
+    "pinned_url": "https://raw.githubusercontent.com/secondlife/lsl-definitions/77cca2b0ee676c46dab7146a2cf63692cc6b91fe/generated/lua_keywords_pretty.xml"
+  },
+  {
+    "name": "slua_definitions.yaml",
+    "path": "slua_definitions.yaml",
+    "revision": "77cca2b0ee676c46dab7146a2cf63692cc6b91fe",
+    "sha256": "85ccb5696574b809c38d6fbc1a0032212c9356bbe920738e8b9a243b6bc79ac7",
+    "git_blob_sha": "2e679cbcf505aeaa64772f8a6ddf1337f0d47acf",
+    "url": "https://raw.githubusercontent.com/secondlife/lsl-definitions/main/slua_definitions.yaml",
+    "pinned_url": "https://raw.githubusercontent.com/secondlife/lsl-definitions/77cca2b0ee676c46dab7146a2cf63692cc6b91fe/slua_definitions.yaml"
+  },
+  {
+    "name": "secondlife.d.luau",
+    "path": "generated/secondlife.d.luau",
+    "revision": "77cca2b0ee676c46dab7146a2cf63692cc6b91fe",
+    "sha256": "eac9088813d8662b74c16c79dc63802e1fc4201ac30598865b80536193e0c647",
+    "git_blob_sha": "3f60920f3aa016ce225e696e1c5f77e8388e64ac",
+    "url": "https://raw.githubusercontent.com/secondlife/lsl-definitions/main/generated/secondlife.d.luau",
+    "pinned_url": "https://raw.githubusercontent.com/secondlife/lsl-definitions/77cca2b0ee676c46dab7146a2cf63692cc6b91fe/generated/secondlife.d.luau"
+  },
+  {
+    "name": "lsl_definitions.yaml",
+    "path": "lsl_definitions.yaml",
+    "revision": "77cca2b0ee676c46dab7146a2cf63692cc6b91fe",
+    "sha256": "ac624629e42add2524dbb8075e6fe20ca237107a3c5ee1642536f66006a12008",
+    "git_blob_sha": "53b93a141a9ad581f3074eafaee65f9ce3c0aa45",
+    "url": "https://raw.githubusercontent.com/secondlife/lsl-definitions/main/lsl_definitions.yaml",
+    "pinned_url": "https://raw.githubusercontent.com/secondlife/lsl-definitions/77cca2b0ee676c46dab7146a2cf63692cc6b91fe/lsl_definitions.yaml"
   }
 ]
