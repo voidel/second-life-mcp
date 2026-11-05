@@ -2,6 +2,7 @@ import asyncio
 import json
 from pathlib import Path
 import sys
+import sysconfig
 
 import pytest
 from mcp import Client, StdioServerParameters
@@ -60,7 +61,7 @@ def test_real_stdio_from_unrelated_directory(module, languages, mode, tmp_path):
 def test_installed_console_entrypoints(command, count, tmp_path):
     import os
     async def run():
-        executable = Path(sys.executable).parent / (command + (".exe" if os.name == "nt" else ""))
+        executable = Path(sysconfig.get_path("scripts")) / (command + (".exe" if os.name == "nt" else ""))
         assert executable.is_file()
         async with Client(StdioServerParameters(command=str(executable), cwd=tmp_path), read_timeout_seconds=15) as client:
             assert len((await client.list_tools()).tools) == count
