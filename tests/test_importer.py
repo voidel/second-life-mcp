@@ -85,3 +85,48 @@ def test_import_minimal_pinned_inventory(tmp_path):
         "--revision", "a" * 40, "--output-dir", str(output)], capture_output=True, text=True)
     assert completed.returncode == 0, completed.stderr
     assert (output / "secondlife.d.luau").read_bytes() == sources["secondlife.d.luau"]
+
+
+@pytest.mark.parametrize("mismatch", [False,True])
+def test_canonical_metadata_survives_import_and_rejects_mismatch(mismatch):
+    xml=b"""<llsd><map>
+      <key>llsd-lsl-syntax-version</key><integer>2</integer>
+      <key>functions</key><map><key>llExample</key><map>
+        <key>return</key><string>integer</string>
+        <key>arguments</key><array>
+          <map><key>index</key><map><key>type</key><string>integer</string></map></map>
+          <map><key>link</key><map><key>type</key><string>integer</string></map></map>
+        </array>
+      </map></map>
+      <key>events</key><map><key>event</key><map/></map>
+      <key>constants</key><map><key>CONSTANT</key><map><key>value</key><integer>1</integer><key>type</key><string>integer</string></map></map>
+      <key>types</key><map><key>integer</key><map/></map>
+    </map></llsd>"""
+    metadata=b"""llsd-lsl-syntax-version: 2
+functions:
+  llExample:
+    arguments:
+      - index: {type: integer, index-semantics: true}
+      - link: {type: integer, enum-semantics: Link}
+    index-semantics: true
+    pure: true
+    requires-permission: [PERMISSION_TAKE_CONTROLS]
+"""
+    if mismatch:metadata=metadata.replace(b'- index:',b'- wrong:')
+    sources={"lsl_keywords_pretty.xml":xml,"lua_keywords_pretty.xml":xml.replace(b'llExample',b'll.Example'),
+        "lsl_definitions.yaml":metadata,"slua_definitions.yaml":b"version: 1.0.0\nbase-classes: []\nclasses: []\n",
+        "secondlife.d.luau":b"declare extern type DetectedEvent with\n  function getKey(self): uuid\nend\n"}
+    if mismatch:
+        with pytest.raises(ValueError,match="Canonical argument name mismatch"):
+            import_catalogs(sources,"a"*40)
+        return
+    catalogs,_=import_catalogs(sources,"a"*40)
+    for language,prefix,base in [("lsl","ll",0),("slua","ll.",1)]:
+        record=Catalog(language,document=catalogs[language]).lookup(prefix+"Example")["symbol"]
+        assert record["parameters"][0]["index_base"]==base
+        assert record["parameters"][1]["enum_semantics"]=="Link"
+        assert record["parameters"][1]["index_base"] is None
+        assert record["index_base"]==base and record["pure"] is True
+        assert record["requires_permissions"]==["PERMISSION_TAKE_CONTROLS"]
+        assert record["delay_seconds"] is None
+        assert record["metadata_source_url"].endswith('/lsl_definitions.yaml')

@@ -20,6 +20,10 @@ class Parameter(BaseModel):
     description: str = Field(default="", max_length=16384)
     optional: bool = False
     variadic: bool = False
+    index_semantics: bool = False
+    index_base: int | None = Field(default=None, ge=0, le=1)
+    enum_semantics: str | None = None
+    bool_semantics: bool = False
 
 
 class Symbol(BaseModel):
@@ -43,10 +47,17 @@ class Symbol(BaseModel):
     tags: list[str]
     caveats: list[str]
     delay_seconds: float | None = Field(default=None, ge=0)
+    index_base: int | None = Field(default=None, ge=0, le=1)
+    pure: bool | None = None
+    requires_permissions: list[str] = Field(default_factory=list)
+    metadata_source_url: str | None = None
+    metadata_source_sha256: str | None = None
 
-    @field_validator("source_url")
+    @field_validator("source_url", "metadata_source_url")
     @classmethod
     def official_source(cls, value):
+        if value is None:
+            return value
         if not (urlparse(value).scheme == "https" and (urlparse(value).netloc in {"wiki.secondlife.com", "create.secondlife.com"} or re.fullmatch(r"https://github\.com/secondlife/(?:sl-vscode-plugin/blob/[0-9a-f]{40}/data/dev/sl-lua-defs\.json|lsl-definitions/blob/[0-9a-f]{40}/(?:generated/[A-Za-z_.]+|[A-Za-z_.]+))", value))):
             raise ValueError("Expected an official Second Life documentation URL")
         return value
@@ -97,6 +108,13 @@ class Catalog:
             "inventory_counts": self.snapshot.inventory_counts,
             "sources": self.snapshot.sources,
             "network_at_runtime": False,
+            "caveat_coverage": "partial",
+            "behavioral_coverage": {
+                "symbols_with_caveats": sum(bool(s.caveats) for s in self.records),
+                "known_delays": sum(s.delay_seconds is not None for s in self.records),
+                "unknown_delays": sum(s.delay_seconds is None for s in self.records),
+                "note": "Empty caveats do not establish safety; null delay is unknown, not zero. Simulator timing, memory and availability are unverified.",
+            },
             "note": "Coverage is scoped to the pinned official public inventory plus supplemental methods. Imports are not manual reviews or simulator availability guarantees.",
         }
 

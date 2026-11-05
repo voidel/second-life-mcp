@@ -138,6 +138,33 @@ def import_catalogs(bodies, revision, imported_on=None):
                 "caveats": [f"Official source flag: {flag}." for flag in flags], "flags": flags,
                 "delay_seconds": float(data["sleep"]) if "sleep" in data else None,
             }
+            # Generated tooltips omit semantic tags and can retain LSL index prose.
+            # Read canonical metadata without guessing from parameter names/types.
+            canonical_name = "ll" + name[3:] if language == "slua" and name.startswith("ll.") else name
+            metadata_bucket = {"function": "functions", "event": "events", "constant": "constants"}.get(kind, "")
+            meta = lsl_metadata.get(metadata_bucket, {}).get(canonical_name, {})
+            if meta and (language == "lsl" or (kind == "function" and name.startswith("ll."))):
+                semantic_source = source_by_name["lsl_definitions.yaml"]
+                symbol.update(metadata_source_url=f"https://github.com/{REPOSITORY}/blob/{revision}/lsl_definitions.yaml",
+                              metadata_source_sha256=semantic_source["sha256"],
+                              pure=meta.get("pure"), requires_permissions=meta.get("requires-permission", []),
+                              index_base=(0 if language == "lsl" else 1) if meta.get("index-semantics") else None)
+                canonical_args = meta.get("arguments", [])
+                if canonical_args and len(canonical_args) != len(args):
+                    raise ValueError(f"Canonical argument count mismatch: {name}")
+                for parameter, original in zip(args, canonical_args):
+                    if len(original) != 1 or parameter["name"] not in original:
+                        raise ValueError(f"Canonical argument name mismatch: {name}")
+                    semantics = original[parameter["name"]]
+                    indexed = semantics.get("index-semantics", False)
+                    parameter.update(index_semantics=indexed,
+                                     index_base=(0 if language == "lsl" else 1) if indexed else None,
+                                     enum_semantics=semantics.get("enum-semantics"),
+                                     bool_semantics=semantics.get("bool-semantics", False))
+                    if indexed and language == "slua":
+                        parameter["description"] += " [SLua uses one-based index semantics; inherited LSL tooltip wording may describe zero-based indexing. Check negative indices and sentinels separately.]"
+                if language == "slua" and (symbol["index_base"] is not None or any(p.get("index_semantics") for p in args)):
+                    symbol["caveats"].append("Canonical index-semantics use a one-based origin in SLua. Enum/link/face arguments are not shifted. Do not blindly translate negative indices or not-found sentinels.")
             if kind == "constant":
                 symbol["signature"] = f'{data.get("type", "keyword")} {name}' + (f' = {data["value"]}' if "value" in data else "")
             if language == "lsl":
