@@ -137,6 +137,7 @@ def build_candidate(revision, output_dir, cache_dir=None, baseline=None, fetch=f
         staging = Path(temporary).resolve()
         if staging.parent != output.parent:
             raise ValueError("Candidate staging path escaped its output parent")
+        (staging / "secondlife.d.luau").write_bytes(bodies["secondlife.d.luau"])
         for name, document in {**catalogs, "source_manifest": manifest, "changes": report}.items():
             (staging / (name + ".json")).write_text(json.dumps(document, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
         # All files are complete and validated before this same-filesystem directory rename.

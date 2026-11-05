@@ -28,7 +28,7 @@ second-life-source-audit = "second_life_mcp.audit:main"
 where = ["src"]
 
 [tool.setuptools.package-data]
-second_life_mcp = ["data/*.json"]
+second_life_mcp = ["data/*.json", "data/*.luau"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]

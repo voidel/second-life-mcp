@@ -10,6 +10,7 @@ from pydantic import Field
 from . import __version__
 from .reference import Catalog, Kind
 from .guidance import guidance
+from .compiler import compile_source
 from lsl_mcp.checker import check_code as check_lsl, MAX_CODE
 from slua_mcp.checker import check_code as check_slua
 
@@ -49,6 +50,11 @@ def register_language(server, language):
     def get_guidance(topic: Annotated[str, Field(min_length=1, max_length=64)] = "all") -> dict[str, Any]:
         """Read source-backed pitfalls and LSL-to-SLua migration notes by topic."""
         return guidance(language, topic)
+
+    @server.tool(name=f"{language}_compile_code", annotations=READ_ONLY, structured_output=True)
+    def compile_code(code: Annotated[str, Field(max_length=MAX_CODE)]) -> dict[str, Any]:
+        """Run configured, hash-pinned local compilers; never execute submitted scripts. Separate from lexical checks."""
+        return compile_source(code, language)
 
     @server.resource(f"{language}://status")
     def status_resource() -> dict[str, Any]:

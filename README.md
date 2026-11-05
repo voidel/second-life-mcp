@@ -48,7 +48,7 @@ makes startup independent of the client's working directory.
 
 ## Tools
 
-Each component exposes five tools. Names begin with `lsl_` or `slua_`:
+Each component exposes six tools. Names begin with `lsl_` or `slua_`:
 
 | Suffix | Purpose |
 | --- | --- |
@@ -57,6 +57,7 @@ Each component exposes five tools. Names begin with `lsl_` or `slua_`:
 | `search_reference` | Literal word search, kind filter and bounded pagination |
 | `check_code` | Language-specific findings with severity, line and column |
 | `get_guidance` | Source-backed pitfalls and migration advice by topic |
+| `compile_code` | Optional pinned local compilation and SLua static analysis |
 
 Resources `lsl://status` and `slua://status` expose the same coverage metadata.
 All tools are read-only and accept text, never arbitrary file paths.
@@ -120,7 +121,7 @@ fetching. It uses conditional HTTP requests, checks cached content hashes, bound
 retries and downloads, validates both catalogs, and writes a semantic changes.json.
 Incomplete downloads never replace the bundled data. Existing candidate directories
 are not overwritten. After reviewing the candidate, copy its two catalog files
-and source_manifest.json into the package data directory and run tests before
+, source_manifest.json and secondlife.d.luau into the package data directory and run tests before
 committing. The manual CI workflow uploads candidates for review; it never
 publishes them automatically.
 
@@ -135,3 +136,25 @@ SLua events/detection/timers and paired valid/invalid source examples. Reports
 include per-scenario pass/fail and duration. CI runs these scenarios on Windows
 and Linux. These checks measure tool behavior; they do not measure an assistant's
 generated-code accuracy or simulator behavior.
+
+## Compiler checks
+
+The optional `lsl_compile_code` and `slua_compile_code` tools use configured
+local executables. Lexical checks stay separate and work without a compiler.
+Submitted source is compiled/analyzed in a temporary directory and is never run.
+Checks have a ten-second limit per backend and bounded diagnostic output.
+
+Use `python tools/fetch_toolchains.py --output-dir .toolchains` to fetch the
+pinned SLua v0.732.17 compiler and luau-lsp 1.70.1 analyzer on Windows/Linux
+x86-64. Archive SHA-256 hashes are verified. Set the environment variable
+`SECOND_LIFE_MCP_TOOLCHAINS` to the absolute generated toolchains.json path
+in your MCP host configuration. The server verifies executable hashes each call.
+Alternatively, supply your own local executable paths, versions and hashes in
+that same configuration format. No tools are downloaded during MCP requests.
+
+LSL is checked through SLua's LSL compiler frontend, not a legacy Mono compiler.
+SLua is compiled, then type-checked using the bundled pinned official definitions
+when the analyzer is configured. Results explicitly state whether static types
+were checked; compiler success does not certify simulator behavior. Single-file
+checks do not resolve require/include imports. The compiler records its LSL
+locations one line late; the adapter normalizes that known offset for the pinned compiler version.

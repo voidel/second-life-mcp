@@ -19,6 +19,9 @@ jobs:
         with:
           python-version: ${{ matrix.python }}
       - run: python -m pip install -e ".[dev]"
+      - run: python tools/fetch_toolchains.py --output-dir .toolchains
       - run: python -m pytest
+        env:
+          SECOND_LIFE_MCP_TOOLCHAINS: ${{ github.workspace }}/.toolchains/toolchains.json
       - run: python -m second_life_mcp.evaluation
       - run: python -m build

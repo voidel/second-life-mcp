@@ -23,7 +23,7 @@ def test_in_memory_schemas_bounds_and_recovery():
     async def run():
         async with Client(create_server(), read_timeout_seconds=10) as client:
             tools = (await client.list_tools()).tools
-            assert len(tools) == 10
+            assert len(tools) == 12
             assert all(t.annotations.read_only_hint for t in tools)
             invalid = await client.call_tool("lsl_search_reference", {"query": "memory", "limit": -1})
             assert invalid.is_error
@@ -47,7 +47,7 @@ def test_real_stdio_from_unrelated_directory(module, languages, mode, tmp_path):
         params = StdioServerParameters(command=sys.executable, args=["-m", module], cwd=tmp_path)
         async with Client(params, mode=mode, read_timeout_seconds=15) as client:
             tools = (await client.list_tools()).tools
-            assert len(tools) == 5 * len(languages)
+            assert len(tools) == 6 * len(languages)
             assert {t.name.split("_")[0] for t in tools} == set(languages)
             for language in languages:
                 result = await client.call_tool(f"{language}_reference_status")
@@ -57,7 +57,7 @@ def test_real_stdio_from_unrelated_directory(module, languages, mode, tmp_path):
     asyncio.run(run())
 
 
-@pytest.mark.parametrize("command,count", [("second-life-mcp", 10), ("lsl-mcp", 5), ("slua-mcp", 5)])
+@pytest.mark.parametrize("command,count", [("second-life-mcp", 12), ("lsl-mcp", 6), ("slua-mcp", 6)])
 def test_installed_console_entrypoints(command, count, tmp_path):
     import os
     async def run():
