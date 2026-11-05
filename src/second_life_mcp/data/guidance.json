@@ -98,5 +98,55 @@
     "text": "Linden Lab announced the SLua open beta on 2 December 2025. Verify current viewer and region support instead of assuming rollout from this snapshot's review date.",
     "source_url": "https://community.secondlife.com/news/featured-news/announcing-the-slua-open-beta-modern-scripting-comes-to-second-life-r11237/",
     "reviewed_on": "2026-11-05"
+  },
+  {
+    "topic": "permissions",
+    "languages": [
+      "lsl",
+      "slua"
+    ],
+    "text": "Permission requests replace the existing mask for that script; request every permission still needed. Match the current avatar, permission key and granted mask before taking controls. Use deliberate input ownership and preserve an active user when another avatar changes the linkset.",
+    "source_url": "https://wiki.secondlife.com/wiki/LlRequestPermissions",
+    "reviewed_on": "2026-11-05"
+  },
+  {
+    "topic": "async-recovery",
+    "languages": [
+      "lsl",
+      "slua"
+    ],
+    "text": "Linked-message delivery can be lost when event queues fill. Critical request/reply work needs one bounded in-flight request, a session/request identifier, retry/deadline policy, idempotent installation and cleanup of retained replies. A compile pass cannot verify this protocol.",
+    "source_url": "https://wiki.secondlife.com/wiki/LlMessageLinked",
+    "reviewed_on": "2026-11-05"
+  },
+  {
+    "topic": "blocking",
+    "languages": [
+      "lsl",
+      "slua"
+    ],
+    "text": "Account for per-call forced delays across loops: a one-second API invoked 30 times can occupy an event for roughly 30 seconds in LSL. Slice cold work across events and reconcile watchdog deadlines. SLua API waits, throttles and scheduling require runtime-specific verification.",
+    "source_url": "https://wiki.secondlife.com/wiki/LlPreloadSound",
+    "reviewed_on": "2026-11-05"
+  },
+  {
+    "topic": "precision",
+    "languages": [
+      "lsl",
+      "slua"
+    ],
+    "text": "Bounded integer millisecond timelines avoid long-uptime float accumulation. Capture paired clock samples before parsing and rebase every live deadline together. Double arithmetic alone does not establish sub-millisecond world synchronization.",
+    "source_url": "https://wiki.secondlife.com/wiki/Float",
+    "reviewed_on": "2026-11-05"
+  },
+  {
+    "topic": "validation",
+    "languages": [
+      "lsl",
+      "slua"
+    ],
+    "text": "Empty caveats and unknown delay data are not evidence of safety. Validate finite values before division, preserve zero-rate stops where valid, and measure actual queue/memory behavior separately from compilation and mocked regression tests.",
+    "source_url": "https://wiki.secondlife.com/wiki/LSL_Errors",
+    "reviewed_on": "2026-11-05"
   }
 ]

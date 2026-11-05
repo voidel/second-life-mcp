@@ -71,7 +71,8 @@
     "changes": [
       "Retain returned callback references and cancel obsolete timers with LLTimers:off.",
       "Repeating callbacks receive scheduled time and interval.",
-      "Do not mix LLTimers with legacy compatibility timers; their underlying event is shared."
+      "Do not mix LLTimers with legacy compatibility timers; their underlying event is shared.",
+      "Reject queued callbacks from a retired session with a generation/session guard; cancellation alone is not an application-state check."
     ],
     "source_url": "https://create.secondlife.com/script/learn-lua/timers/",
     "reviewed_on": "2026-11-05",
@@ -88,7 +89,7 @@
       "ll.List2String",
       "table.insert"
     ],
-    "summary": "Native Lua sequence operations conventionally begin at index 1, while retained ll list APIs can keep their LSL indexing conventions. Tables may legally contain a key of 0.",
+    "summary": "Native Lua sequences and canonical index-semantics arguments use a one-based origin in SLua; LSL uses zero-based indices. Consult structured index_base metadata instead of inherited tooltip prose. Enum, link and face numbers do not shift. Tables may legally contain a key of 0.",
     "changes": [
       "Distinguish native table indexing from each ll API's documented index parameter.",
       "Replace parallel-list maps with table fields where appropriate; check ordering and nil behavior."
@@ -114,7 +115,9 @@
     "summary": "SLua uses explicit userdata constructors and conversion helpers instead of LSL casts and angle-bracket constructors. Conversion helpers can return nil.",
     "changes": [
       "Check conversion results before using them.",
-      "Use the current structured return type; constructors and conversion helpers need not have the same failure behavior."
+      "Use the current structured return type; constructors and conversion helpers need not have the same failure behavior.",
+      "Successful touuid conversion is not a canonical UUID spelling check. The pinned native runtime accepts alternate separators; validate the original text when strict UUID syntax is part of a protocol.",
+      "A link-message id may carry arbitrary text. Do not discard non-UUID routing identifiers."
     ],
     "source_url": "https://create.secondlife.com/script/learn-lua/from-lsl/",
     "reviewed_on": "2026-11-05",
@@ -138,6 +141,181 @@
       "For negative values, Luau floor division and LSL truncation toward zero differ; preserve the intended rounding explicitly."
     ],
     "source_url": "https://create.secondlife.com/script/learn-lua/from-lsl/",
+    "reviewed_on": "2026-11-05",
+    "source_revision": "77cca2b0ee676c46dab7146a2cf63692cc6b91fe"
+  },
+  {
+    "topic": "indexing",
+    "lsl": [
+      "llList2String",
+      "llGetInventoryName",
+      "llGetNotecardLineSync",
+      "llGetLinkName"
+    ],
+    "slua": [
+      "ll.List2String",
+      "ll.GetInventoryName",
+      "ll.GetNotecardLineSync",
+      "ll.GetLinkName"
+    ],
+    "summary": "Index origin is a parameter semantic, not a rule for every integer argument.",
+    "changes": [
+      "Use parameters[].index_semantics and index_base from the pinned canonical definitions.",
+      "Keep enum_semantics arguments such as link numbers and faces unchanged.",
+      "Check each API's range, negative-index and not-found behavior rather than adding one indiscriminately."
+    ],
+    "source_url": "https://github.com/secondlife/lsl-definitions/blob/77cca2b0ee676c46dab7146a2cf63692cc6b91fe/lsl_definitions.yaml",
+    "reviewed_on": "2026-11-05",
+    "source_revision": "77cca2b0ee676c46dab7146a2cf63692cc6b91fe"
+  },
+  {
+    "topic": "rounding",
+    "lsl": [
+      "llRound"
+    ],
+    "slua": [
+      "math.round",
+      "math.floor"
+    ],
+    "summary": "Replacing llRound with math.round changes negative halfway results: llRound(-0.5) is 0; math.round(-0.5) is -1.",
+    "changes": [
+      "For finite values in the intended integer range, math.floor(value + 0.5) preserves LSL tie direction.",
+      "Handle non-finite inputs, range limits and signed integer overflow explicitly."
+    ],
+    "source_url": "https://wiki.secondlife.com/wiki/LlRound",
+    "reviewed_on": "2026-11-05",
+    "source_revision": "77cca2b0ee676c46dab7146a2cf63692cc6b91fe",
+    "additional_sources": [
+      "https://luau.org/library/"
+    ],
+    "verified_runtime": "SLua v0.732.17 native CLI"
+  },
+  {
+    "topic": "vector-math",
+    "lsl": [
+      "vector",
+      "rotation"
+    ],
+    "slua": [
+      "vector",
+      "vector.dot",
+      "vector.cross",
+      "quaternion",
+      "quaternion.conjugate"
+    ],
+    "summary": "LSL vector multiplication is a dot product; native SLua vector multiplication is component-wise.",
+    "changes": [
+      "Use vector.dot(a,b) for LSL a*b and vector.cross(a,b) for LSL a%b.",
+      "Test noncommuting quaternion composition and vector/rotation division; do not infer operand order from generic Lua examples.",
+      "Native vector components need not have the same precision as Lua number arithmetic."
+    ],
+    "source_url": "https://github.com/secondlife/lsl-definitions/blob/77cca2b0ee676c46dab7146a2cf63692cc6b91fe/slua_definitions.yaml",
+    "reviewed_on": "2026-11-05",
+    "source_revision": "77cca2b0ee676c46dab7146a2cf63692cc6b91fe",
+    "additional_sources": [
+      "https://luau.org/library/"
+    ],
+    "verified_runtime": "SLua v0.732.17 native CLI"
+  },
+  {
+    "topic": "strings",
+    "lsl": [
+      "llStringLength",
+      "llList2String"
+    ],
+    "slua": [
+      "utf8.len",
+      "string.format",
+      "ll.List2String"
+    ],
+    "summary": "String lengths, numeric casts and formatted wire fields require deliberate migration.",
+    "changes": [
+      "Lua #text counts bytes; utf8.len counts codepoints. Keep byte budgets distinct from character counts.",
+      "The pinned native ll.List2String({1},1) yields \"1.000000\". Explicitly format integer identifiers, fixed decimal floats and signed zero when exact strings matter.",
+      "Preserve canonical-number validation; decoding JSON before validating the original lexeme can erase a distinction such as 1 versus 1.0."
+    ],
+    "source_url": "https://github.com/secondlife/lsl-definitions/blob/77cca2b0ee676c46dab7146a2cf63692cc6b91fe/lsl_definitions.yaml",
+    "reviewed_on": "2026-11-05",
+    "source_revision": "77cca2b0ee676c46dab7146a2cf63692cc6b91fe",
+    "verified_runtime": "SLua v0.732.17 native CLI"
+  },
+  {
+    "topic": "list-values",
+    "lsl": [
+      "list",
+      "llListFindList",
+      "llList2List"
+    ],
+    "slua": [
+      "table.clone",
+      "table.find"
+    ],
+    "summary": "Lua tables have reference semantics; LSL lists behave as values. table.find searches one value and returns nil on absence, unlike a list-subsequence search.",
+    "changes": [
+      "Clone private sequences before mutation when an LSL assignment previously isolated their contents.",
+      "Retain subsequence behavior and convert the not-found sentinel explicitly when replacing llListFindList.",
+      "Native table sorting mutates its input; check ordering, stride and heterogeneous values."
+    ],
+    "source_url": "https://create.secondlife.com/script/learn-lua/from-lsl/",
+    "reviewed_on": "2026-11-05",
+    "source_revision": "77cca2b0ee676c46dab7146a2cf63692cc6b91fe"
+  },
+  {
+    "topic": "evaluation",
+    "lsl": [
+      "integer",
+      "list"
+    ],
+    "slua": [
+      "number"
+    ],
+    "summary": "LSL evaluates both logical operands; Lua and/or short-circuit and return operand values. Zero and empty tables are truthy in Lua.",
+    "changes": [
+      "Write explicit truth predicates for numeric masks, empty lists and null UUIDs.",
+      "Preserve side effects deliberately when translating LSL right-to-left expressions; do not rely on surface operator substitution."
+    ],
+    "source_url": "https://wiki.secondlife.com/wiki/LSL_Operators",
+    "reviewed_on": "2026-11-05",
+    "source_revision": "77cca2b0ee676c46dab7146a2cf63692cc6b91fe"
+  },
+  {
+    "topic": "clocks",
+    "lsl": [
+      "llGetTime",
+      "llResetTime",
+      "llGetAndResetTime"
+    ],
+    "slua": [
+      "ll.GetTime",
+      "os.time"
+    ],
+    "summary": "Removed clock-reset APIs need explicit local epoch bookkeeping; integer wall time is not an elapsed subsecond clock.",
+    "changes": [
+      "Capture elapsed-time and UTC samples together before parsing, retaining midnight wrap and session validation.",
+      "Rebase deadlines together at safe interaction boundaries; do not reset another active user's timer context.",
+      "Double arithmetic improves numeric headroom but does not prove simulator clock resolution or timer delivery precision."
+    ],
+    "source_url": "https://create.secondlife.com/script/learn-lua/from-lsl/",
+    "reviewed_on": "2026-11-05",
+    "source_revision": "77cca2b0ee676c46dab7146a2cf63692cc6b91fe"
+  },
+  {
+    "topic": "json-validation",
+    "lsl": [
+      "llJsonGetValue",
+      "llList2Json"
+    ],
+    "slua": [
+      "lljson.decode",
+      "lljson.encode"
+    ],
+    "summary": "Native JSON conversion changes table shapes, null representation and numeric formatting; decoding is not protocol validation.",
+    "changes": [
+      "Validate types, nesting, bounds and session/request IDs before retaining a response.",
+      "Keep original numeric lexemes if a protocol rejects noncanonical spelling.",
+      "Budget UTF-8 bytes and serialized peak memory; do not assume number encoding preserves every double bit."
+    ],
+    "source_url": "https://create.secondlife.com/script/learn-lua/json/",
     "reviewed_on": "2026-11-05",
     "source_revision": "77cca2b0ee676c46dab7146a2cf63692cc6b91fe"
   }

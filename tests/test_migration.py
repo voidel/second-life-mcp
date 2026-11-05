@@ -11,7 +11,8 @@ from second_life_mcp.migration import migration_guidance
 def test_reviewed_mappings_only_reference_existing_symbols():
     for language in ("lsl", "slua"):
         report = migration_guidance(language)
-        assert len(report["items"]) == 7
+        assert {"indexing", "rounding", "vector-math", "clocks", "json-validation"} <= set(report["topics"])
+        assert len(report["items"]) >= 15
         for row in report["items"]:
             assert all(symbol["found"] for symbol in row["source_symbols"] + row["target_symbols"]), row["topic"]
 

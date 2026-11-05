@@ -32,6 +32,7 @@ def main():
     target = args.output_dir.resolve()
     target.mkdir(parents=True, exist_ok=True)
     config = {"schema_version": 1}
+    test_runtime = None
     for name, version, url, expected, filename in ASSETS[sys.platform]:
         with urlopen(Request(url, headers={"User-Agent": "second-life-mcp-toolchains"}), timeout=30) as response:
             archive = response.read(64 * 1024 * 1024 + 1)
@@ -45,9 +46,22 @@ def main():
             executable.write_bytes(package.read(candidates[0]))
             if os.name != "nt":
                 executable.chmod(0o755)
+            if name == "compiler":
+                # Same hash-verified official archive; separate from server config.
+                runtime_name = "slua.exe" if os.name == "nt" else "slua"
+                runtimes = [entry for entry in package.namelist() if Path(entry).name == runtime_name]
+                if len(runtimes) != 1:
+                    raise ValueError("Expected one native test runtime")
+                runtime_path = target / runtime_name
+                runtime_path.write_bytes(package.read(runtimes[0]))
+                if os.name != "nt":
+                    runtime_path.chmod(0o755)
+                test_runtime = {"executable": str(runtime_path), "version": version,
+                                "sha256": hashlib.sha256(runtime_path.read_bytes()).hexdigest()}
         config[name] = {"executable": str(executable), "version": version,
                         "sha256": hashlib.sha256(executable.read_bytes()).hexdigest()}
     (target / "toolchains.json").write_text(json.dumps(config, indent=2) + "\n", encoding="utf-8")
+    (target / "test-runtime.json").write_text(json.dumps(test_runtime, indent=2) + "\n", encoding="utf-8")
     print(target / "toolchains.json")
 
 

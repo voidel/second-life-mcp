@@ -391,5 +391,150 @@
         "operator": "equals"
       }
     ]
+  },
+  {
+    "id": "slua-one-based-inventory",
+    "tool": "slua_lookup_symbol",
+    "arguments": {
+      "name": "ll.GetInventoryName"
+    },
+    "checks": [
+      {
+        "path": [
+          "symbol",
+          "parameters",
+          1,
+          "index_base"
+        ],
+        "operator": "equals",
+        "value": 1
+      },
+      {
+        "path": [
+          "symbol",
+          "parameters",
+          0,
+          "enum_semantics"
+        ],
+        "operator": "equals",
+        "value": "InventoryType"
+      }
+    ]
+  },
+  {
+    "id": "lsl-zero-based-notecard",
+    "tool": "lsl_lookup_symbol",
+    "arguments": {
+      "name": "llGetNotecardLineSync"
+    },
+    "checks": [
+      {
+        "path": [
+          "symbol",
+          "parameters",
+          1,
+          "index_base"
+        ],
+        "operator": "equals",
+        "value": 0
+      }
+    ]
+  },
+  {
+    "id": "slua-link-enum-unshifted",
+    "tool": "slua_lookup_symbol",
+    "arguments": {
+      "name": "ll.GetLinkName"
+    },
+    "checks": [
+      {
+        "path": [
+          "symbol",
+          "parameters",
+          0,
+          "index_base"
+        ],
+        "operator": "equals",
+        "value": null
+      },
+      {
+        "path": [
+          "symbol",
+          "parameters",
+          0,
+          "enum_semantics"
+        ],
+        "operator": "equals",
+        "value": "Link"
+      }
+    ]
+  },
+  {
+    "id": "slua-partial-behavior-coverage",
+    "tool": "slua_reference_status",
+    "arguments": {},
+    "checks": [
+      {
+        "path": [
+          "caveat_coverage"
+        ],
+        "operator": "equals",
+        "value": "partial"
+      }
+    ]
+  },
+  {
+    "id": "lsl-rounding-migration",
+    "tool": "lsl_migration_guidance",
+    "arguments": {
+      "symbol": "llRound"
+    },
+    "checks": [
+      {
+        "path": [
+          "items",
+          0,
+          "topic"
+        ],
+        "operator": "equals",
+        "value": "rounding"
+      }
+    ]
+  },
+  {
+    "id": "lsl-permission-ownership",
+    "tool": "lsl_get_guidance",
+    "arguments": {
+      "topic": "permissions"
+    },
+    "checks": [
+      {
+        "path": [
+          "items",
+          0,
+          "topic"
+        ],
+        "operator": "equals",
+        "value": "permissions"
+      }
+    ]
+  },
+  {
+    "id": "slua-linked-reply-recovery",
+    "tool": "slua_get_guidance",
+    "arguments": {
+      "topic": "async-recovery"
+    },
+    "checks": [
+      {
+        "path": [
+          "items",
+          0,
+          "topic"
+        ],
+        "operator": "equals",
+        "value": "async-recovery"
+      }
+    ]
   }
 ]

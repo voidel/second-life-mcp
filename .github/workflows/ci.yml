@@ -24,5 +24,6 @@ jobs:
       - run: uv run --no-sync python -m pytest
         env:
           SECOND_LIFE_MCP_TOOLCHAINS: ${{ github.workspace }}/.toolchains/toolchains.json
+          SECOND_LIFE_MCP_TEST_RUNTIME: ${{ github.workspace }}/.toolchains/test-runtime.json
       - run: uv run --no-sync python -m second_life_mcp.evaluation
       - run: uv run --no-sync python -m build
