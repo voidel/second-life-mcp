@@ -1,0 +1,395 @@
+[
+  {
+    "id": "lsl-http-request",
+    "tool": "lsl_lookup_symbol",
+    "arguments": {
+      "name": "llHTTPRequest"
+    },
+    "checks": [
+      {
+        "path": [
+          "symbol",
+          "return_type"
+        ],
+        "value": "key",
+        "operator": "equals"
+      },
+      {
+        "path": [
+          "symbol",
+          "parameters",
+          1,
+          "type"
+        ],
+        "value": "list",
+        "operator": "equals"
+      }
+    ]
+  },
+  {
+    "id": "lsl-permission-mask",
+    "tool": "lsl_lookup_symbol",
+    "arguments": {
+      "name": "llRequestPermissions"
+    },
+    "checks": [
+      {
+        "path": [
+          "symbol",
+          "parameters",
+          0,
+          "type"
+        ],
+        "value": "key",
+        "operator": "equals"
+      },
+      {
+        "path": [
+          "symbol",
+          "parameters",
+          1,
+          "type"
+        ],
+        "value": "integer",
+        "operator": "equals"
+      }
+    ]
+  },
+  {
+    "id": "lsl-cached-notecard",
+    "tool": "lsl_lookup_symbol",
+    "arguments": {
+      "name": "llGetNotecardLineSync"
+    },
+    "checks": [
+      {
+        "path": [
+          "symbol",
+          "return_type"
+        ],
+        "value": "string",
+        "operator": "equals"
+      },
+      {
+        "path": [
+          "symbol",
+          "parameters",
+          1,
+          "name"
+        ],
+        "value": "line",
+        "operator": "equals"
+      }
+    ]
+  },
+  {
+    "id": "lsl-notecard-fallback",
+    "tool": "lsl_get_guidance",
+    "arguments": {
+      "topic": "notecards"
+    },
+    "checks": [
+      {
+        "path": [
+          "items",
+          0,
+          "topic"
+        ],
+        "value": "notecards",
+        "operator": "equals"
+      }
+    ]
+  },
+  {
+    "id": "lsl-deprecated-setter",
+    "tool": "lsl_lookup_symbol",
+    "arguments": {
+      "name": "llSetPrimitiveParams"
+    },
+    "checks": [
+      {
+        "path": [
+          "symbol",
+          "flags"
+        ],
+        "value": "deprecated",
+        "operator": "contains"
+      },
+      {
+        "path": [
+          "symbol",
+          "delay_seconds"
+        ],
+        "value": 0.2,
+        "operator": "equals"
+      }
+    ]
+  },
+  {
+    "id": "exact-lookup-no-prefix-substitution",
+    "tool": "lsl_lookup_symbol",
+    "arguments": {
+      "name": "llHTTP"
+    },
+    "checks": [
+      {
+        "path": [
+          "found"
+        ],
+        "value": false,
+        "operator": "equals"
+      }
+    ]
+  },
+  {
+    "id": "case-sensitive-lookup",
+    "tool": "lsl_lookup_symbol",
+    "arguments": {
+      "name": "llmessagelinked"
+    },
+    "checks": [
+      {
+        "path": [
+          "found"
+        ],
+        "value": false,
+        "operator": "equals"
+      },
+      {
+        "path": [
+          "suggestions"
+        ],
+        "value": "llMessageLinked",
+        "operator": "contains"
+      }
+    ]
+  },
+  {
+    "id": "slua-event-registration",
+    "tool": "slua_lookup_symbol",
+    "arguments": {
+      "name": "LLEvents:on"
+    },
+    "checks": [
+      {
+        "path": [
+          "symbol",
+          "parameters",
+          1,
+          "type"
+        ],
+        "value": "LLEventHandler",
+        "operator": "equals"
+      }
+    ]
+  },
+  {
+    "id": "slua-touch-payload",
+    "tool": "slua_lookup_symbol",
+    "arguments": {
+      "name": "touch_start"
+    },
+    "checks": [
+      {
+        "path": [
+          "symbol",
+          "parameters",
+          0,
+          "type"
+        ],
+        "value": "{DetectedEvent}",
+        "operator": "equals"
+      }
+    ]
+  },
+  {
+    "id": "slua-detection-key",
+    "tool": "slua_lookup_symbol",
+    "arguments": {
+      "name": "DetectedEvent:getKey"
+    },
+    "checks": [
+      {
+        "path": [
+          "symbol",
+          "return_type"
+        ],
+        "value": "uuid",
+        "operator": "equals"
+      }
+    ]
+  },
+  {
+    "id": "slua-recurring-timer",
+    "tool": "slua_lookup_symbol",
+    "arguments": {
+      "name": "LLTimers:every"
+    },
+    "checks": [
+      {
+        "path": [
+          "symbol",
+          "parameters",
+          1,
+          "type"
+        ],
+        "value": "LLTimerEveryCallback",
+        "operator": "equals"
+      }
+    ]
+  },
+  {
+    "id": "slua-timer-callback",
+    "tool": "slua_lookup_symbol",
+    "arguments": {
+      "name": "LLTimerEveryCallback"
+    },
+    "checks": [
+      {
+        "path": [
+          "symbol",
+          "type"
+        ],
+        "value": "(scheduled: number, interval: number) -> ()",
+        "operator": "equals"
+      }
+    ]
+  },
+  {
+    "id": "lsl-string-comment-counterexample",
+    "tool": "lsl_check_code",
+    "arguments": {
+      "code": "// switch(1) ? a : b\ninteger count; default { state_entry() { count++; llOwnerSay(\"switch(x) ? a : b\"); } }"
+    },
+    "checks": [
+      {
+        "path": [
+          "issues"
+        ],
+        "value": [],
+        "operator": "equals"
+      },
+      {
+        "path": [
+          "has_errors"
+        ],
+        "value": false,
+        "operator": "equals"
+      }
+    ]
+  },
+  {
+    "id": "lsl-real-ternary-error",
+    "tool": "lsl_check_code",
+    "arguments": {
+      "code": "default { state_entry() { integer x = TRUE ? 1 : 2; } }"
+    },
+    "checks": [
+      {
+        "path": [
+          "has_errors"
+        ],
+        "value": true,
+        "operator": "equals"
+      },
+      {
+        "path": [
+          "issues",
+          0,
+          "rule"
+        ],
+        "value": "unsupported-ternary",
+        "operator": "equals"
+      }
+    ]
+  },
+  {
+    "id": "slua-modern-syntax",
+    "tool": "slua_check_code",
+    "arguments": {
+      "code": "local x: number? = nil\nlocal a = if x then 1 else 2\nLLEvents:on(\"touch_start\", function(events) ll.Say(0,tostring(a)) end)"
+    },
+    "checks": [
+      {
+        "path": [
+          "issues"
+        ],
+        "value": [],
+        "operator": "equals"
+      },
+      {
+        "path": [
+          "has_errors"
+        ],
+        "value": false,
+        "operator": "equals"
+      }
+    ]
+  },
+  {
+    "id": "slua-long-string-counterexample",
+    "tool": "slua_check_code",
+    "arguments": {
+      "code": "local text = [==[llSay() != &&]==] -- llSay()"
+    },
+    "checks": [
+      {
+        "path": [
+          "issues"
+        ],
+        "value": [],
+        "operator": "equals"
+      }
+    ]
+  },
+  {
+    "id": "slua-legacy-call-warning",
+    "tool": "slua_check_code",
+    "arguments": {
+      "code": "llSay(0, \"hello\")"
+    },
+    "checks": [
+      {
+        "path": [
+          "issues",
+          0,
+          "rule"
+        ],
+        "value": "legacy-lsl-call",
+        "operator": "equals"
+      },
+      {
+        "path": [
+          "has_errors"
+        ],
+        "value": false,
+        "operator": "equals"
+      }
+    ]
+  },
+  {
+    "id": "slua-operator-error",
+    "tool": "slua_check_code",
+    "arguments": {
+      "code": "if x != 1 then end"
+    },
+    "checks": [
+      {
+        "path": [
+          "has_errors"
+        ],
+        "value": true,
+        "operator": "equals"
+      },
+      {
+        "path": [
+          "issues",
+          0,
+          "rule"
+        ],
+        "value": "lsl-operator",
+        "operator": "equals"
+      }
+    ]
+  }
+]

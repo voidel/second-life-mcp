@@ -21,6 +21,7 @@ lsl-mcp = "lsl_mcp.server:main"
 slua-mcp = "slua_mcp.server:main"
 second-life-import = "second_life_mcp.importer:main"
 second-life-update = "second_life_mcp.update:main"
+second-life-evaluate = "second_life_mcp.evaluation:main"
 second-life-source-audit = "second_life_mcp.audit:main"
 
 [tool.setuptools.packages.find]

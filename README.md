@@ -125,3 +125,13 @@ committing. The manual CI workflow uploads candidates for review; it never
 publishes them automatically.
 
 See [contributing](CONTRIBUTING.md) and [data attribution](DATA_LICENSE.md).
+
+## Practical evaluation
+
+Run `second-life-evaluate --output evaluation-report.json` to exercise the
+combined server through real stdio MCP from an unrelated working directory.
+The suite covers HTTP and permission signatures, notecard guidance, exact lookup,
+SLua events/detection/timers and paired valid/invalid source examples. Reports
+include per-scenario pass/fail and duration. CI runs these scenarios on Windows
+and Linux. These checks measure tool behavior; they do not measure an assistant's
+generated-code accuracy or simulator behavior.
