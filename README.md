@@ -3,10 +3,11 @@
 Offline MCP reference tools for **LSL** and **SLua**, with separate language
 components and a combined stdio server.
 
-This is an v0.2.0 development release: **1,640 LSL records and 1,993 SLua records**,
+Version **1.0.0** provides stable MCP tool contracts: **1,640 LSL records and 1,993 SLua records**,
 plus focused guidance. Both catalogs cover pinned official inventories plus supplemental SLua methods and callback types. A missing symbol
-means "unverified in this snapshot", not "does not exist". The code checkers are
-lexical aids, not compilers or simulators.
+means "unverified in this snapshot", not "does not exist". `check_code` tools are
+lexical aids. Optional `compile_code` tools run pinned local compilers and
+SLua type analysis; neither tool establishes simulator behavior.
 
 ## Install and run
 
@@ -170,10 +171,10 @@ exact catalog records. Unmapped APIs are not guessed or automatically renamed.
 
 ## Install a release and connect a client
 
-Install the wheel attached to the v0.2.0 GitHub release:
+Install the wheel attached to the v1.0.0 GitHub release:
 
 ```sh
-python -m pip install https://github.com/voidel/second-life-mcp/releases/download/v0.2.0/second_life_mcp-0.2.0-py3-none-any.whl
+python -m pip install https://github.com/voidel/second-life-mcp/releases/download/v1.0.0/second_life_mcp-1.0.0-py3-none-any.whl
 ```
 
 The source archive is available on the same release page. This project is not
@@ -203,3 +204,54 @@ uv.lock pins transitive runtime and development dependencies across supported
 platforms. CI uses the lock and fetches hash-pinned compiler dependencies for
 real analyzer tests. Ordinary pip installation resolves compatible transitive
 dependencies; use the locked workflow when reproducing development checks.
+
+## Release 1.0.0
+
+Stable offline MCP tools for LSL and SLua, informed by practical scripting audits
+and a complete application migration. No application source or private project
+documentation is included in this repository or its distributions.
+
+- Preserve canonical parameter index origins, enum/boolean semantics, permissions
+  and purity, with separate metadata provenance. Correct misleading inherited
+  SLua indexing advice; link/face enums are not shifted.
+- Expand reviewed migration guidance for rounding, UUID validation, vector math,
+  list ownership, string/wire formatting, evaluation order, clocks and JSON.
+- Add behavioral audit guidance for permission replacement, delayed work,
+  request/reply recovery and finite numeric validation. Reference status now
+  distinguishes partial caveat coverage and unknown delays from proven safety.
+- Exercise generic semantic regressions in the pinned official native SLua VM,
+  alongside real MCP transport tests and local compiler/type-checker tests.
+- Publish a wheel, source archive and SHA-256 checksums as a stable GitHub release.
+
+The API inventory remains pinned to official definition revision
+`77cca2b0ee676c46dab7146a2cf63692cc6b91fe`. A 1.0 server release does not freeze
+SLua or certify viewer/region availability, runtime throttles or application
+performance. Compilation never executes submitted MCP client code. Native
+runtime probes execute only fixed developer tests and perform no simulator I/O.
+
+### Semantic metadata and validation
+
+`lookup_symbol` now includes `parameters[].index_semantics`, `index_base`,
+`enum_semantics` and `bool_semantics`, plus symbol-level `pure`,
+`requires_permissions`, return `index_base` and `metadata_source_url` / hash.
+An unannotated argument has no inferred index origin. Structured semantics come
+from the pinned canonical YAML; imported descriptions may retain LSL wording.
+Negative indices, not-found sentinels and list-subsequence behavior need their
+own migration policy. The server does not automatically rewrite source.
+
+`reference_status` reports partial behavioral/caveat coverage separately from
+official API inventory coverage. Empty caveats are not proof of safety; null
+delay means unknown. Practical audits still need queue, permission, memory,
+network, asset and lifecycle testing on the intended simulator.
+
+The toolchain fetcher also writes a separate, hash-pinned `test-runtime.json`
+for fixed native developer probes. This file is not accepted as a server
+compiler configuration and does not add an MCP execution tool:
+
+```sh
+second-life-toolchains --output-dir .toolchains
+# Set SECOND_LIFE_MCP_TOOLCHAINS to the absolute .toolchains/toolchains.json path.
+# Set SECOND_LIFE_MCP_TEST_RUNTIME to the absolute .toolchains/test-runtime.json path.
+python -m pytest
+second-life-evaluate
+```

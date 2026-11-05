@@ -25,6 +25,7 @@ jobs:
       - run: uv run --no-sync python -m pytest
         env:
           SECOND_LIFE_MCP_TOOLCHAINS: ${{ github.workspace }}/.toolchains/toolchains.json
+          SECOND_LIFE_MCP_TEST_RUNTIME: ${{ github.workspace }}/.toolchains/test-runtime.json
       - run: uv run --no-sync second-life-evaluate
       - run: uv run --no-sync python -m build
       - name: Hash distributions
@@ -43,6 +44,9 @@ jobs:
           RELEASE_TAG: ${{ github.ref_name }}
         shell: bash
         run: |
+          uv run --no-sync python tools/release_notes.py "$RELEASE_TAG" > "$RUNNER_TEMP/release-notes.md"
+          flags=(--latest)
+          if [[ "$RELEASE_TAG" == *-* ]]; then flags=(--prerelease); fi
           gh release create "$RELEASE_TAG" dist/*.whl dist/*.tar.gz dist/SHA256SUMS.txt \
-            --verify-tag --prerelease --title "Second Life MCP $RELEASE_TAG" \
-            --notes "Offline LSL and SLua reference, resilient source updates, practical MCP evaluations, pinned local compiler checks, reviewed migration guidance and locked development dependencies. See the README for installation and compiler setup."
+            --verify-tag "${flags[@]}" --title "Second Life MCP $RELEASE_TAG" \
+            --notes-file "$RUNNER_TEMP/release-notes.md"
