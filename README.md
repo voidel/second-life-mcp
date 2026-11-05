@@ -3,7 +3,7 @@
 Offline MCP reference tools for **LSL** and **SLua**, with separate language
 components and a combined stdio server.
 
-This is an initial development release: **1,640 LSL records and 1,993 SLua records**,
+This is an v0.2.0 development release: **1,640 LSL records and 1,993 SLua records**,
 plus focused guidance. Both catalogs cover pinned official inventories plus supplemental SLua methods and callback types. A missing symbol
 means "unverified in this snapshot", not "does not exist". The code checkers are
 lexical aids, not compilers or simulators.
@@ -48,7 +48,7 @@ makes startup independent of the client's working directory.
 
 ## Tools
 
-Each component exposes six tools. Names begin with `lsl_` or `slua_`:
+Each component exposes seven tools. Names begin with `lsl_` or `slua_`:
 
 | Suffix | Purpose |
 | --- | --- |
@@ -58,6 +58,7 @@ Each component exposes six tools. Names begin with `lsl_` or `slua_`:
 | `check_code` | Language-specific findings with severity, line and column |
 | `get_guidance` | Source-backed pitfalls and migration advice by topic |
 | `compile_code` | Optional pinned local compilation and SLua static analysis |
+| `migration_guidance` | Reviewed per-API and language-behavior comparisons |
 
 Resources `lsl://status` and `slua://status` expose the same coverage metadata.
 All tools are read-only and accept text, never arbitrary file paths.
@@ -120,8 +121,8 @@ The updater resolves the official main branch to one immutable revision before
 fetching. It uses conditional HTTP requests, checks cached content hashes, bounds
 retries and downloads, validates both catalogs, and writes a semantic changes.json.
 Incomplete downloads never replace the bundled data. Existing candidate directories
-are not overwritten. After reviewing the candidate, copy its two catalog files
-, source_manifest.json and secondlife.d.luau into the package data directory and run tests before
+are not overwritten. After reviewing the candidate, copy its two catalog files,
+source_manifest.json and secondlife.d.luau into the package data directory and run tests before
 committing. The manual CI workflow uploads candidates for review; it never
 publishes them automatically.
 
@@ -144,7 +145,7 @@ local executables. Lexical checks stay separate and work without a compiler.
 Submitted source is compiled/analyzed in a temporary directory and is never run.
 Checks have a ten-second limit per backend and bounded diagnostic output.
 
-Use `python tools/fetch_toolchains.py --output-dir .toolchains` to fetch the
+Use `second-life-toolchains --output-dir .toolchains` to fetch the
 pinned SLua v0.732.17 compiler and luau-lsp 1.70.1 analyzer on Windows/Linux
 x86-64. Archive SHA-256 hashes are verified. Set the environment variable
 `SECOND_LIFE_MCP_TOOLCHAINS` to the absolute generated toolchains.json path
@@ -158,3 +159,47 @@ when the analyzer is configured. Results explicitly state whether static types
 were checked; compiler success does not certify simulator behavior. Single-file
 checks do not resolve require/include imports. The compiler records its LSL
 locations one line late; the adapter normalizes that known offset for the pinned compiler version.
+
+## Migration assistance
+
+Call `lsl_migration_guidance` with `{"symbol":"llSetTimerEvent"}` or
+`{"topic":"events"}`. The SLua component exposes the reverse comparison.
+Reviewed topics cover API names, detection callbacks, lifecycle, independent
+timers, tables/indexing, conversions and numeric conditions. Both sides include
+exact catalog records. Unmapped APIs are not guessed or automatically renamed.
+
+## Install a release and connect a client
+
+Install the wheel attached to the v0.2.0 GitHub release:
+
+```sh
+python -m pip install https://github.com/voidel/second-life-mcp/releases/download/v0.2.0/second_life_mcp-0.2.0-py3-none-any.whl
+```
+
+The source archive is available on the same release page. This project is not
+published to PyPI; the release wheel is the installable distribution.
+
+Configuration examples are in `examples/clients/claude-code.json` and
+`examples/clients/vscode.json`. Replace `<ABSOLUTE_PYTHON>` with the
+absolute interpreter path from the environment where the package is installed.
+Copy the Claude Code entry into .mcp.json, or the VS Code entry into
+.vscode/mcp.json. Both launch `python -m second_life_mcp`, which works from
+any working directory. Example launches and tool calls are tested through real
+MCP stdio; the clients' graphical interfaces are not part of the test suite.
+See the [Claude Code MCP configuration reference](https://code.claude.com/docs/en/mcp)
+and [VS Code MCP configuration reference](https://code.visualstudio.com/docs/copilot/customization/mcp-servers).
+
+## Locked development environment
+
+```sh
+python -m pip install uv==0.13.7
+uv sync --locked --extra dev
+uv run --no-sync python -m pytest
+uv run --no-sync second-life-evaluate
+uv run --no-sync python -m build
+```
+
+uv.lock pins transitive runtime and development dependencies across supported
+platforms. CI uses the lock and fetches hash-pinned compiler dependencies for
+real analyzer tests. Ordinary pip installation resolves compatible transitive
+dependencies; use the locked workflow when reproducing development checks.

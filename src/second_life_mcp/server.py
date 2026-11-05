@@ -11,6 +11,7 @@ from . import __version__
 from .reference import Catalog, Kind
 from .guidance import guidance
 from .compiler import compile_source
+from .migration import migration_guidance
 from lsl_mcp.checker import check_code as check_lsl, MAX_CODE
 from slua_mcp.checker import check_code as check_slua
 
@@ -55,6 +56,14 @@ def register_language(server, language):
     def compile_code(code: Annotated[str, Field(max_length=MAX_CODE)]) -> dict[str, Any]:
         """Run configured, hash-pinned local compilers; never execute submitted scripts. Separate from lexical checks."""
         return compile_source(code, language)
+
+    @server.tool(name=f"{language}_migration_guidance", annotations=READ_ONLY, structured_output=True)
+    def compare_languages(
+        topic: Annotated[str, Field(min_length=1, max_length=64)] = "all",
+        symbol: Annotated[str, Field(min_length=1, max_length=128)] | None = None,
+    ) -> dict[str, Any]:
+        """Review exact per-API counterparts and event, timer, table, numeric and conversion differences. No automatic source rewriting."""
+        return migration_guidance(language, topic, symbol)
 
     @server.resource(f"{language}://status")
     def status_resource() -> dict[str, Any]:

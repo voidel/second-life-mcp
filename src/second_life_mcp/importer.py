@@ -220,6 +220,7 @@ def main():
     args.output_dir.mkdir(parents=True, exist_ok=True)
     for language, document in catalogs.items():
         (args.output_dir / f"{language}.json").write_text(json.dumps(document, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    (args.output_dir / "secondlife.d.luau").write_bytes(bodies["secondlife.d.luau"])
     (args.output_dir / "source_manifest.json").write_text(json.dumps(manifest, indent=2) + "\n", encoding="utf-8")
     print(json.dumps({lang: {"symbols": len(doc["symbols"]), "inventory": doc["inventory_counts"]} for lang, doc in catalogs.items()}))
 

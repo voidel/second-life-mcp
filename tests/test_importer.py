@@ -60,7 +60,7 @@ def test_invalid_cli_source_set_never_writes_output(tmp_path):
     assert not target.exists()
 
 
-def test_import_minimal_pinned_inventory():
+def test_import_minimal_pinned_inventory(tmp_path):
     xml = b"""<llsd><map>
       <key>llsd-lsl-syntax-version</key><integer>2</integer>
       <key>functions</key><map><key>example</key><map><key>return</key><string>integer</string></map></map>
@@ -77,3 +77,11 @@ def test_import_minimal_pinned_inventory():
     assert len(catalogs["slua"]["symbols"]) == 5
     assert all(row["revision"] == "a" * 40 for row in manifest)
     assert Catalog(document=catalogs["lsl"]).lookup("CONSTANT")["symbol"]["value"] == "1"
+
+    for name, body in sources.items():
+        (tmp_path / name).write_bytes(body)
+    output = tmp_path / "candidate"
+    completed = subprocess.run([sys.executable, "-m", "second_life_mcp.importer", "--source-dir", str(tmp_path),
+        "--revision", "a" * 40, "--output-dir", str(output)], capture_output=True, text=True)
+    assert completed.returncode == 0, completed.stderr
+    assert (output / "secondlife.d.luau").read_bytes() == sources["secondlife.d.luau"]

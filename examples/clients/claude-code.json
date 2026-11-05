@@ -1,0 +1,12 @@
+{
+  "mcpServers": {
+    "second-life": {
+      "type": "stdio",
+      "command": "<ABSOLUTE_PYTHON>",
+      "args": [
+        "-m",
+        "second_life_mcp"
+      ]
+    }
+  }
+}

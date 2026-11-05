@@ -1,1 +1,4 @@
 include LICENSE DATA_LICENSE.md CONTRIBUTING.md
+include uv.lock
+recursive-include examples *.json
+recursive-include tools *.py

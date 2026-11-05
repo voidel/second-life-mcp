@@ -1,0 +1,144 @@
+[
+  {
+    "topic": "api-names",
+    "lsl": [
+      "llSay",
+      "llMessageLinked"
+    ],
+    "slua": [
+      "ll.Say",
+      "ll.MessageLinked"
+    ],
+    "summary": "Many Linden APIs move into the ll namespace. Verify the exact target entry and signature; changing the spelling alone does not migrate event or type behavior.",
+    "changes": [
+      "Compare parameter and return types for each named API against the pinned catalogs.",
+      "Keep linked-message routing and session validation in the application."
+    ],
+    "source_url": "https://create.secondlife.com/script/learn-lua/from-lsl/",
+    "reviewed_on": "2026-11-05",
+    "source_revision": "77cca2b0ee676c46dab7146a2cf63692cc6b91fe"
+  },
+  {
+    "topic": "events",
+    "lsl": [
+      "touch_start",
+      "llDetectedKey"
+    ],
+    "slua": [
+      "LLEvents:on",
+      "LLEvents:off",
+      "DetectedEvent:getKey"
+    ],
+    "summary": "LSL detection handlers receive a count and access detection entries by zero-based index. SLua detection callbacks receive a table of DetectedEvent values, whose sequence begins at index 1.",
+    "changes": [
+      "Register the callback explicitly through LLEvents:on.",
+      "Use events[1]:getKey() for the first detection.",
+      "Retain callback references and remove unused subscriptions."
+    ],
+    "source_url": "https://create.secondlife.com/script/learn-lua/events/",
+    "reviewed_on": "2026-11-05",
+    "source_revision": "77cca2b0ee676c46dab7146a2cf63692cc6b91fe"
+  },
+  {
+    "topic": "lifecycle",
+    "lsl": [
+      "state_entry"
+    ],
+    "slua": [
+      "LLEvents:on"
+    ],
+    "summary": "A function named state_entry does not automatically establish LSL state behavior in SLua. Put initialization at script top level or explicitly call an initialization function.",
+    "changes": [
+      "Model state transitions deliberately with subscription changes or application state.",
+      "Keep initialization separate from event registration and cleanup."
+    ],
+    "source_url": "https://create.secondlife.com/script/learn-lua/from-lsl/",
+    "reviewed_on": "2026-11-05",
+    "source_revision": "77cca2b0ee676c46dab7146a2cf63692cc6b91fe"
+  },
+  {
+    "topic": "timers",
+    "lsl": [
+      "llSetTimerEvent",
+      "timer"
+    ],
+    "slua": [
+      "LLTimers:every",
+      "LLTimers:once",
+      "LLTimers:off"
+    ],
+    "summary": "LSL has one script timer. SLua supports independent repeating and one-shot timer callbacks identified by function references.",
+    "changes": [
+      "Retain returned callback references and cancel obsolete timers with LLTimers:off.",
+      "Repeating callbacks receive scheduled time and interval.",
+      "Do not mix LLTimers with legacy compatibility timers; their underlying event is shared."
+    ],
+    "source_url": "https://create.secondlife.com/script/learn-lua/timers/",
+    "reviewed_on": "2026-11-05",
+    "source_revision": "77cca2b0ee676c46dab7146a2cf63692cc6b91fe"
+  },
+  {
+    "topic": "tables",
+    "lsl": [
+      "list",
+      "llList2String"
+    ],
+    "slua": [
+      "list",
+      "ll.List2String",
+      "table.insert"
+    ],
+    "summary": "Native Lua sequence operations conventionally begin at index 1, while retained ll list APIs can keep their LSL indexing conventions. Tables may legally contain a key of 0.",
+    "changes": [
+      "Distinguish native table indexing from each ll API's documented index parameter.",
+      "Replace parallel-list maps with table fields where appropriate; check ordering and nil behavior."
+    ],
+    "source_url": "https://create.secondlife.com/script/learn-lua/from-lsl/",
+    "reviewed_on": "2026-11-05",
+    "source_revision": "77cca2b0ee676c46dab7146a2cf63692cc6b91fe"
+  },
+  {
+    "topic": "conversions",
+    "lsl": [
+      "key",
+      "vector",
+      "rotation"
+    ],
+    "slua": [
+      "touuid",
+      "tovector",
+      "toquaternion",
+      "vector",
+      "quaternion"
+    ],
+    "summary": "SLua uses explicit userdata constructors and conversion helpers instead of LSL casts and angle-bracket constructors. Conversion helpers can return nil.",
+    "changes": [
+      "Check conversion results before using them.",
+      "Use the current structured return type; constructors and conversion helpers need not have the same failure behavior."
+    ],
+    "source_url": "https://create.secondlife.com/script/learn-lua/from-lsl/",
+    "reviewed_on": "2026-11-05",
+    "source_revision": "77cca2b0ee676c46dab7146a2cf63692cc6b91fe"
+  },
+  {
+    "topic": "numbers",
+    "lsl": [
+      "integer",
+      "float"
+    ],
+    "slua": [
+      "number",
+      "bit32.band",
+      "bit32.btest"
+    ],
+    "summary": "LSL integer arithmetic and Lua number arithmetic have different behavior. LSL integer division truncates; use the appropriate Luau division operation deliberately. Lua treats 0 as truthy.",
+    "changes": [
+      "Use explicit predicates such as mask ~= 0 when porting numeric conditions.",
+      "Review overflow, division and bitwise operations instead of assuming LSL integer semantics.",
+      "For negative values, Luau floor division and LSL truncation toward zero differ; preserve the intended rounding explicitly."
+    ],
+    "source_url": "https://create.secondlife.com/script/learn-lua/from-lsl/",
+    "reviewed_on": "2026-11-05",
+    "source_revision": "77cca2b0ee676c46dab7146a2cf63692cc6b91fe"
+  }
+]
