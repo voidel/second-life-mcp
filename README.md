@@ -106,10 +106,22 @@ python -m build
 second-life-source-audit
 ```
 
-The explicit audit command checks the fingerprint of the official supplemental
-SLua definitions. Exit 0 means unchanged, 2 means review required, and 1 means
-the check failed. It never updates the catalogs or their review dates. It does
-not cover every wiki or creation-portal page. CI offers a manual source-audit
-workflow; normal tests work offline.
+The audit command checks all five canonical sources against their pinned hashes.
+It never updates the catalogs or their review dates.
+
+Generate an atomic, reviewable candidate without changing bundled snapshots:
+
+```sh
+second-life-update --output-dir candidate --cache-dir .source-cache
+```
+
+The updater resolves the official main branch to one immutable revision before
+fetching. It uses conditional HTTP requests, checks cached content hashes, bounds
+retries and downloads, validates both catalogs, and writes a semantic changes.json.
+Incomplete downloads never replace the bundled data. Existing candidate directories
+are not overwritten. After reviewing the candidate, copy its two catalog files
+and source_manifest.json into the package data directory and run tests before
+committing. The manual CI workflow uploads candidates for review; it never
+publishes them automatically.
 
 See [contributing](CONTRIBUTING.md) and [data attribution](DATA_LICENSE.md).

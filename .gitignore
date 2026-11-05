@@ -7,3 +7,5 @@ dist/
 build/
 source-audit*.json
 .env
+candidate/
+.source-cache/

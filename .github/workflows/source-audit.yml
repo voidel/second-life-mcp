@@ -1,12 +1,16 @@
-name: Audit official source
+name: Audit official sources
 on:
   workflow_dispatch:
+    inputs:
+      revision:
+        description: "Optional immutable official definition commit; blank resolves main"
+        required: false
 
 permissions:
   contents: read
 
 jobs:
-  audit:
+  candidate:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7
@@ -14,4 +18,15 @@ jobs:
         with:
           python-version: "3.12"
       - run: python -m pip install .
-      - run: second-life-source-audit
+      - name: Generate reviewable reference candidate
+        env:
+          SOURCE_REVISION: ${{ inputs.revision }}
+        shell: bash
+        run: |
+          args=(--output-dir candidate --cache-dir .source-cache)
+          if [ -n "$SOURCE_REVISION" ]; then args+=(--revision "$SOURCE_REVISION"); fi
+          second-life-update "${args[@]}"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: reference-candidate
+          path: candidate/
